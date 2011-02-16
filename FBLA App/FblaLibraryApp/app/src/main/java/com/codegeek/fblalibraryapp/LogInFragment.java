@@ -528,26 +528,12 @@ public class LogInFragment extends Fragment {
                 String likes = bookDetailsArray[8];
                 String booleanLiked = bookDetailsArray[9];
 
-                Intent intent = new Intent(getActivity(), UniversalBookInfo.class);
-                intent.putExtra("dateDue", dateDue);
-                intent.putExtra("checkedOutId", checkedOutId);
-                intent.putExtra("libraryId", libraryId);
-                intent.putExtra("fines", fines);
-                intent.putExtra("userName", userName);
-                intent.putExtra("dateOut", dateOut);
-                intent.putExtra("title", title);
-                intent.putExtra("bookId", bookId);
-                intent.putExtra("likes", likes);
-                intent.putExtra("booleanLiked", booleanLiked);
 
-                /*for(String name : bookDetailsArray){
-                    name = name.substring(name.indexOf("=")+1);
-                    name = name.replace("+", "").replace(" ", "").replace("{", "").replace("}", "").replace("+", "");
-                    System.out.println(name);
-                    //Toast.makeText(getContext(), item, Toast.LENGTH_SHORT).show();
-//                    Log.v("Name", name);
-
-                }*/
+                Intent sendIntent = new Intent();
+                sendIntent.setAction(Intent.ACTION_SEND);
+                sendIntent.putExtra(Intent.EXTRA_TEXT, "Checkout \"" + title + "\" on Mybrary! I checked this book out and would definitely recommend this great book!");
+                sendIntent.setType("text/plain");
+                startActivity(sendIntent);
             }
         });
 
