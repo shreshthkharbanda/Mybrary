@@ -2,11 +2,11 @@
 Description: This readme file is for Mybrary application used for Library Management System. It includes application installation instructions and detail information about application features, technologies used, artifacts, and sources 
 Released Version: 1.0.0
 Released Date: Feb 26th 2018
-Author: Shreshth Kharbanda, Northcreek High School, Bothell WA
+Author: Shreshth Kharbanda, North Creek High School, Bothell WA
 *****************************************************************************************
 
 Installation Instructions:
- - Download apk file on Android device from the location (Link to Github)
+ - Download apk file on Android device from the location (https://github.com/smartyshre/Mybrary/blob/master/FBLA%20App/FblaLibraryApp/app/mybrary.apk)
  - Open the apk file from the device
  - This will install the Mybrary app on your device
  - Open the Mybrary App
@@ -23,11 +23,7 @@ Application Features:
  - Library Map: Visual map of the library to locate the book
  - Push Notifications: If book is overdue, user gets the push notification on the device
  - Email Notifications: Password reset instructions
- - Refresh - Swipe / Pull to refresh the current screen
-
-Screen Shots:
- 
- 
+ - Refresh - Swipe / Pull to refresh the current screen 
  
 User Interface Layer: This layer is the front end of the application for users to interact with the Library Management System
 Technologies Used:
@@ -35,7 +31,7 @@ Technologies Used:
   - Language: Java/XML
 
 Artifacts:
- APK File Name: Mybrary.apk
+ APK File Name: Mybrary.apk (https://github.com/smartyshre/Mybrary/blob/master/FBLA%20App/FblaLibraryApp/app/mybrary.apk)
 
 
 
@@ -49,14 +45,24 @@ Technologies Used:
 Artifacts:
  Database Name: Poller (database server is running on AWS)
  PHP File Names: All files are in /var/www/html folder in the server running on AWS
-   - CheckUserNamePassword.php - This script is used for user login to get the input from front end and validate user-id/password against "user" Table
+   - CheckUserNamePassword.php - This script is used for user login to get the input from front end and validate user-id/password against "LibraryUsers" Table
    - BooksCheckOut.php - 
 
  Scheduled Job (Cronjob):
-   - sendfirebasenotification.php - 
+   - sendfirebasenotification.php 
    
    
  Other Sources:
-   JSON Parse Library:
+   JSON Parse Source(s):
+    - http://sampleprogramz.com/android/mysqldb.php
+    - http://www.codejava.net/java-se/jdbc/jdbc-tutorial-sql-insert-select-update-and-delete-examples
+    - https://www.codeproject.com/Articles/267023/Send-and-receive-json-between-android-and-php
    Likebutton Library from Github:
+    - https://github.com/jd-alexander/LikeButton
+   Gmail sending source:
+    - https://github.com/plum-umd/android-intents/tree/master/TimeTracker/src/org/umd/timetracker
+   Zooming Library from Github:
+    - https://github.com/jsibbold/zoomage
+   MaterialBarcodeScanner Library from Github:
+    - https://github.com/EdwardvanRaak/MaterialBarcodeScanner
       
