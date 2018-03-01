@@ -28,6 +28,7 @@ Application Features:
 Screen Shots:
  
  
+ 
 User Interface Layer: This layer is the front end of the application for users to interact with the Library Management System
 Technologies Used:
   - Compatible Devices: Android based Mobile/Tablets
