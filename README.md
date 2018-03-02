@@ -49,8 +49,15 @@ Technologies Used:
 Artifacts:
  Database Name: Poller (database server is running on AWS)
  PHP File Names: All files are in the /var/www/html folder in the server running on AWS
-   - CheckUserNamePassword.php - This script is used for user login to get the input from front end and validate user-id/password against "user" Table
-   - BooksCheckOut.php - 
+   - checkUserNamePassword.php - This script is used for user login to get the input from front end and validate user-id/password against "user" Table
+   - booksCheckedOut.php - Allows user to view books he/she has checked out currently. 
+   - getAllBooks.php - Shows the book database in the user interface layer
+   - barcodeScan.php - Provides all information about the book that has just been scanned by the user
+   - checkoutBook.php - Allows the user to checkout a book. Triggered when user enters id and clicks "Checkout Book" or scans a barcode of an existing book in the database
+   - signUpLibrary.php - Inserts data into the LibraryUsers table inside the database
+   - insertToken.php - Inserts firebase identification number and firebase registration identification number. Inserted/Updated in the database when a user signs into any device
+   - updatePassword.php - Updates a password into the LibraryUsers table within the database with an auto-generated password inside the app
+   
 
 
  Scheduled Job (Cronjob):
