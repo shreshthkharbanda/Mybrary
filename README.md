@@ -1,4 +1,4 @@
-# MYBRARY
+# Mybrary
 
 *****************************************************************************************
 Description: This readme file is for Mybrary application used for a Library Management System. It includes application installation instructions and detailed information about application features, technologies used, artifacts, and sources 
@@ -53,8 +53,8 @@ Artifacts:
    
    
  Sources:
-   JSON Parse Sources:
+   - JSON Parse Sources:
     - http://sampleprogramz.com/android/mysqldb.php
     - http://www.codejava.net/java-se/jdbc/jdbc-tutorial-sql-insert-select-update-and-delete-examples 
-   Likebutton Library from Github:
+   - Likebutton Library from Github:
     - https://github.com/jd-alexander/LikeButton
