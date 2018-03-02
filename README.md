@@ -54,7 +54,7 @@ Artifacts:
    
  Sources:
    - JSON Parse Sources:
-    - http://sampleprogramz.com/android/mysqldb.php
-    - http://www.codejava.net/java-se/jdbc/jdbc-tutorial-sql-insert-select-update-and-delete-examples 
+    	- http://sampleprogramz.com/android/mysqldb.php
+    	- http://www.codejava.net/java-se/jdbc/jdbc-tutorial-sql-insert-select-update-and-delete-examples 
    - Likebutton Library from Github:
-    - https://github.com/jd-alexander/LikeButton
+    	- https://github.com/jd-alexander/LikeButton
