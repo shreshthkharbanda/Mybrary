@@ -27,14 +27,17 @@ Application Features:
  - Email Notifications: Password reset instructions
  - Refresh - Swipe/Pull to refresh the current screen 
  
+
 User Interface Layer: This layer is the front end of the application for users to interact with the Library Management System
 Technologies Used:
   - Compatible Devices: Android based Mobile/Tablets
   - Language: Java/XML
 
+
 Artifacts:
   - APK File Name: Mybrary.apk
-\0\n
+
+
 Back End (Server Side) Layer - This layer has the database for all the books and transactions for user's checkout. Also, PHP scripts to retrieve data for front layer and update database based on user actions on the device. 
 Technologies Used: 
   - Database: MySQL Database
@@ -42,16 +45,18 @@ Technologies Used:
   - Cloud Platform: AWS
   - Language: PHP
   
+
 Artifacts:
  Database Name: Poller (database server is running on AWS)
  PHP File Names: All files are in the /var/www/html folder in the server running on AWS
    - CheckUserNamePassword.php - This script is used for user login to get the input from front end and validate user-id/password against "user" Table
    - BooksCheckOut.php - 
 
+
  Scheduled Job (Cronjob):
    - sendfirebasenotification.php
    
-   
+
  Sources:
    - JSON Parse Sources:
     	- http://sampleprogramz.com/android/mysqldb.php
