@@ -33,8 +33,8 @@ Technologies Used:
   - Language: Java/XML
 
 Artifacts:
- APK File Name: Mybrary.apk
-
+  - APK File Name: Mybrary.apk
+\0\n
 Back End (Server Side) Layer - This layer has the database for all the books and transactions for user's checkout. Also, PHP scripts to retrieve data for front layer and update database based on user actions on the device. 
 Technologies Used: 
   - Database: MySQL Database
