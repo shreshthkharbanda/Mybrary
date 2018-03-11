@@ -1,5 +1,6 @@
 package com.codegeek.fblalibraryapp;
 
+import android.annotation.SuppressLint;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.util.Log;
@@ -29,6 +30,7 @@ public class UniversalCheckedOutBook extends AppCompatActivity {
     String dateDueString;
     String userString;
 
+    @SuppressLint("SetTextI18n")
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -41,15 +43,16 @@ public class UniversalCheckedOutBook extends AppCompatActivity {
         } else {
             Log.e("UCOBook", "bookTitle is null");
         }
-        firstName = bundle.getString("firstName");
-        lastName = bundle.getString("lastName");
-        category = bundle.getString("category");
-        callNumber = bundle.getString("callNumber");
+        String dateDueString = bundle.getString("dateDue");
+        String checkedOutId = bundle.getString("checkedOutId");
+        String libraryId = bundle.getString("libraryId");
+        String fines = bundle.getString("fines");
+        String userName = bundle.getString("userName");
+        String dateOutString  = bundle.getString("dateOut");
+        String title = bundle.getString("title");
+        String bookId = bundle.getString("bookId");
         likes = bundle.getString("likes");
-        description = bundle.getString("description");
-        dateOutString = bundle.getString("dateCheckedOut");
-        dateDueString = bundle.getString("dateCheckedDue");
-        userString = bundle.getString("loggedInUser");
+        String booleanLiked = bundle.getString("booleanLiked");
 
         bookTitle = findViewById(R.id.bookTitleUniversal);
         authorFirst = findViewById(R.id.authorFirstNameUniversal);
@@ -64,56 +67,51 @@ public class UniversalCheckedOutBook extends AppCompatActivity {
         try {
             bookTitle.setText(title);
         } catch (NullPointerException npe) {
-            bookTitle.setText("Null");
-        }
-        try {
-            authorFirst.setText(firstName);
-        } catch (NullPointerException npe) {
-            authorFirst.setText("Null");
+            bookTitle.setText("");
         }
         try {
             authorLast.setText(lastName);
         } catch (NullPointerException npe) {
-            authorLast.setText("Null");
+            authorLast.setText("");
         }
         try {
             bookCategory.setText(category);
         } catch (NullPointerException npe) {
-            bookCategory.setText("Null");
+            bookCategory.setText("");
         }
         try {
             if (callNumber.equals("null")) {
-                bookCallNumber.setText("Null");
+                bookCallNumber.setText("");
             } else {
                 bookCallNumber.setText("#" + callNumber);
             }
         } catch (NullPointerException npe) {
-            bookCallNumber.setText("Null");
+            bookCallNumber.setText("");
         }
         try {
             bookLikes.setText("+" + likes);
         } catch (NullPointerException npe) {
-            bookLikes.setText("Null");
+            bookLikes.setText("");
         }
         try {
             dateOut.setText(description);
         } catch (NullPointerException npe) {
-            bookDescription.setText("Null");
+            bookDescription.setText("");
         }
         try {
             dateOut.setText(dateOutString);
         } catch (NullPointerException npe) {
-            dateOut.setText("Null");
+            dateOut.setText("");
         }
         try {
             dateDue.setText(dateDueString);
         } catch (NullPointerException npe) {
-            dateDue.setText("Null");
+            dateDue.setText("");
         }
         try {
             userTextView.setText(userString);
         } catch (NullPointerException npe) {
-            userTextView.setText("Null");
+            userTextView.setText("");
         }
     }
 }

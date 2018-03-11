@@ -68,6 +68,7 @@ import java.net.MalformedURLException;
 import java.net.URL;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.Calendar;
 import java.util.Date;
 import java.util.HashMap;
@@ -155,7 +156,17 @@ public class LogInFragment extends Fragment {
     EditText signUpPassword2;
     TextView alreadyMember;
     TextView createAccount;
+
     TextView bookIdText;
+    TextView bookTitleText;
+    TextView authorLastText;
+    TextView bookCategoryText;
+    TextView bookCallNumberText;
+    TextView bookLikesText;
+    TextView bookDescriptionText;
+    TextView dateOutText;
+    TextView dateDueText;
+    TextView loggedInUserText;
 
     CheckBox saveUsername;
     CheckBox savePassword;
@@ -197,10 +208,13 @@ public class LogInFragment extends Fragment {
     EditText oldPasswordEdit;
     EditText confirmPasswordEdit;
     View updatePasswordView;
+    View reportBugView;
+    EditText explainBug;
     AlertDialog.Builder alertDialogBuilder;
     AlertDialog alertDialog;
     Button changePass;
     Boolean changePassValid = false;
+    AlertDialog reportBug;
 
     @Override
     public View onCreateView(final LayoutInflater inflater, final ViewGroup container,
@@ -238,6 +252,9 @@ public class LogInFragment extends Fragment {
         newPasswordEdit = updatePasswordView.findViewById(R.id.newPassword);
         confirmPasswordEdit = updatePasswordView.findViewById(R.id.confirmPassword);
 
+        reportBugView = inflater.inflate(R.layout.report_bug_layout, container, false);
+        explainBug = reportBugView.findViewById(R.id.explainBug);
+
         pdLoading = new ProgressDialog(getContext());
 
         if (savedUsername == null) {
@@ -254,9 +271,19 @@ public class LogInFragment extends Fragment {
         listItemView = inflater.inflate(R.layout.layout_account_list_item, container, false);
         likeButton = listItemView.findViewById(R.id.like_button);
         checkedOut = listItemView.findViewById(R.id.checkedOutId);
+        bookIdText = listItemView.findViewById(R.id.bookIdAccount);
+        bookTitleText = listItemView.findViewById(R.id.bookName);
+//        authorLastText = listItemView.findViewById(R.id.authorLastName);
+//        bookCategoryText = listItemView.findViewById(R.id.bookCategory);
+        bookCallNumberText = listItemView.findViewById(R.id.bookCallNumber);
+        bookLikesText = listItemView.findViewById(R.id.numberOfLikes);
+//        bookDescriptionText = listItemView.findViewById(R.id.bookDescription);
+        dateOutText = listItemView.findViewById(R.id.outDate);
+        dateDueText = listItemView.findViewById(R.id.dueDate);
+        loggedInUserText = listItemView.findViewById(R.id.userName);
 
         singleBookInfo = inflater.inflate(R.layout.activity_universal_book_info, container, false);
-        bookIdText = listItemView.findViewById(R.id.bookId);
+
 
         createAccount.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -294,27 +321,6 @@ public class LogInFragment extends Fragment {
                 Color.CYAN,
                 Color.BLACK
         );
-
-        listAccount.setOnItemClickListener(new AdapterView.OnItemClickListener() {
-            @Override
-            public void onItemClick(AdapterView<?> adapterView, View view, int i, long l) {
-                Intent intent = new Intent(getActivity(), UniversalCheckedOutBook.class);
-                intent.putExtra("listDetails", listAccount.getItemAtPosition(i).toString());
-                getBookInfo();
-
-                intent.putExtra("bookId", bookId);
-                intent.putExtra("bookTitle", title);
-//                intent.putExtra("authorFirst", firstName);
-                intent.putExtra("authorLast", authorLast);
-                intent.putExtra("bookCategory", category);
-                intent.putExtra("bookCallNumber", callNumber);
-                intent.putExtra("numberOfLikes", likes);
-                intent.putExtra("loggedInUser", loggedInUser);
-                intent.putExtra("dateCheckedOut", dateOut);
-                intent.putExtra("dateCheckedDue", dateDue);
-                startActivity(intent);
-            }
-        });
         StrictMode.ThreadPolicy policy = new StrictMode.ThreadPolicy.Builder().permitAll().build();
         StrictMode.setThreadPolicy(policy);
 
@@ -411,7 +417,7 @@ public class LogInFragment extends Fragment {
                     } else {
                         registerUser(libraryId.getText().toString(), signUpFirst.getText().toString() + " " + signUpLast.getText().toString(),
                                 signUpEmail.getText().toString(), signUpPassword.getText().toString(), signUpPhone.getText().toString(),
-                                "http://ec2-52-41-161-91.us-west-2.compute.amazonaws.com/signUpLibrary-bk.php");
+                                "http://ec2-52-41-161-91.us-west-2.compute.amazonaws.com/signUpLibrary.php");
 
                         logInLayout.setVisibility(View.VISIBLE);
                         accountLayout.setVisibility(View.GONE);
@@ -502,6 +508,46 @@ public class LogInFragment extends Fragment {
                         .setIcon(R.drawable.mybrary_logo)
                         .setCancelable(false)
                         .show();
+            }
+        });
+        listAccount.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+            @Override
+            public void onItemClick(AdapterView<?> adapterView, View view, int i, long l) {
+                String item = listAccount.getItemAtPosition(i).toString().replace("{", "").replace("}", "");
+                Log.v("Login", item);
+                String[] bookDetailsArray = item.split(",");
+
+                String dateDue = bookDetailsArray[0];
+                String checkedOutId = bookDetailsArray[1];
+                String libraryId = bookDetailsArray[2];
+                String fines = bookDetailsArray[3];
+                String userName = bookDetailsArray[4];
+                String dateOut = bookDetailsArray[5];
+                String title = bookDetailsArray[6];
+                String bookId = bookDetailsArray[7];
+                String likes = bookDetailsArray[8];
+                String booleanLiked = bookDetailsArray[9];
+
+                Intent intent = new Intent(getActivity(), UniversalBookInfo.class);
+                intent.putExtra("dateDue", dateDue);
+                intent.putExtra("checkedOutId", checkedOutId);
+                intent.putExtra("libraryId", libraryId);
+                intent.putExtra("fines", fines);
+                intent.putExtra("userName", userName);
+                intent.putExtra("dateOut", dateOut);
+                intent.putExtra("title", title);
+                intent.putExtra("bookId", bookId);
+                intent.putExtra("likes", likes);
+                intent.putExtra("booleanLiked", booleanLiked);
+
+                /*for(String name : bookDetailsArray){
+                    name = name.substring(name.indexOf("=")+1);
+                    name = name.replace("+", "").replace(" ", "").replace("{", "").replace("}", "").replace("+", "");
+                    System.out.println(name);
+                    //Toast.makeText(getContext(), item, Toast.LENGTH_SHORT).show();
+//                    Log.v("Name", name);
+
+                }*/
             }
         });
 
@@ -1046,139 +1092,6 @@ public class LogInFragment extends Fragment {
         SignUpAsync signUpAsync = new SignUpAsync();
         signUpAsync.execute();
     }
-
-    public void getBookInfo() {
-        @SuppressLint("StaticFieldLeak")
-        class GetDataJSON extends AsyncTask<String, Void, String> {
-            @Override
-            protected String doInBackground(String... params) {
-
-                InputStream inputStream;
-                String result;
-                String dataUrl = "http://ec2-52-41-161-91.us-west-2.compute.amazonaws.com/checkedOutInfo.php";
-
-                List<NameValuePair> signUpPairInfo = new ArrayList<>();
-                signUpPairInfo.add(new BasicNameValuePair("bookId", bookId));
-
-                try {
-                    HttpClient httpclient = new DefaultHttpClient();
-                    httpPost = new HttpPost(dataUrl);
-
-                    JSONObject jsonObject = new JSONObject();
-                    jsonObject.accumulate("bookId", bookId);
-
-                    httpPost.setEntity(new UrlEncodedFormEntity(signUpPairInfo));
-                    httpPost.setHeader("Accept", "application/json");
-                    httpPost.setHeader("Content-type", "application/json");
-
-                    HttpResponse httpResponse = httpclient.execute(httpPost);
-                    inputStream = httpResponse.getEntity().getContent();
-                    result = convertInputStreamToString(inputStream);
-                    myJSON = result;
-                } catch (Exception e) {
-                    Log.d("InputStream", e.getLocalizedMessage());
-                }
-                httpPost.setHeader("Content-type", "application/json");
-
-                inputStream = null;
-                String result2 = null;
-                try {
-                    HttpResponse httpResponse = httpClient.execute(httpPost);
-                    HttpEntity entity = httpResponse.getEntity();
-
-                    inputStream = entity.getContent();
-
-                    BufferedReader bufferedReader = new BufferedReader(new InputStreamReader(inputStream, "UTF-8"), 8);
-                    StringBuilder stringBuilder = new StringBuilder();
-
-                    String line;
-                    while ((line = bufferedReader.readLine()) != null) {
-                        stringBuilder.append(line).append("\n");
-                    }
-                    result2 = stringBuilder.toString();
-                } catch (NullPointerException npe) {
-                    npe.printStackTrace();
-
-                    logInCode = 0;
-                } catch (IOException ioe) {
-                    ioe.printStackTrace();
-                    getActivity().runOnUiThread(new Runnable() {
-                        @Override
-                        public void run() {
-                            Toast.makeText(getContext(), "Input-Output Exception", Toast.LENGTH_SHORT).show();
-                        }
-                    });
-                    logInCode = 0;
-                } finally {
-                    if (inputStream != null) try {
-                        inputStream.close();
-                    } catch (IOException e) {
-                        e.printStackTrace();
-                        logInCode = 0;
-                    }
-                }
-                return result2;
-            }
-
-            @Override
-            protected void onPostExecute(String result) {
-                showBookInfo(myJSON);
-            }
-        }
-        GetDataJSON g = new GetDataJSON();
-        g.execute();
-    }
-
-    public void showBookInfo(String jsonData) {
-
-        user = userEmail;
-        inputStream = null;
-        result = "";
-        dataUrl = "http://ec2-52-41-161-91.us-west-2.compute.amazonaws.com/checkedOutInfo.php";
-
-        try {
-            JSONObject jsonObj2 = new JSONObject(jsonData);
-            booksArray = null;
-            booksList = null;
-            booksArray = jsonObj2.getJSONArray(TAG_RESULTS);
-            booksList = new ArrayList<>();
-
-            jsonObj2 = new JSONObject(jsonData);
-            booksArray = jsonObj2.getJSONArray(TAG_RESULTS);
-
-            for (int i = 0; i < booksArray.length(); i++) {
-                JSONObject c = booksArray.getJSONObject(i);
-                id = c.getString(TAG_BOOK_ID);
-                title = c.getString(TAG_TITLE);
-//                firstName = c.getString(TAG_AUTHOR_FIRST);
-                authorLast = c.getString(TAG_AUTHOR_LAST);
-                category = c.getString(TAG_CATEGORY);
-                callNumber = c.getString(TAG_CALL_NUMBER);
-                likes = c.getString(TAG_LIKES);
-
-                books = new HashMap<>();
-
-                books.put(TAG_BOOK_ID, id);
-                books.put(TAG_TITLE, title);
-//                books.put(TAG_AUTHOR_FIRST, firstName);
-                books.put(TAG_AUTHOR_LAST, authorLast);
-                books.put(TAG_CATEGORY, category);
-                books.put(TAG_CALL_NUMBER, "#" + callNumber);
-                books.put(TAG_LIKES, "+" + likes);
-
-                bookList.add(books);
-            }
-            try {
-                listAccount.setAdapter(logInAdapter);
-            } catch (Exception npe) {
-                Log.e("ShowBookInfo--NPE", npe.toString());
-            }
-
-        } catch (Exception e) {
-            e.printStackTrace();
-        }
-    }
-
     public void updatePassword(String email, String updatePassword) {
         ArrayList<NameValuePair> nameValuePairs = new ArrayList<>();
 
@@ -1347,7 +1260,36 @@ public class LogInFragment extends Fragment {
         switch (item.getItemId()) {
             // profile settings icon clicked
             case R.id.reportBug:
-                Toast.makeText(getContext(), "Report Bug", Toast.LENGTH_SHORT).show();
+//                Toast.makeText(getContext(), "Report Bug", Toast.LENGTH_SHORT).show();
+                reportBug = new AlertDialog.Builder(getContext())
+                        .setView(reportBugView)
+                        .setTitle("Report Bug")
+                        .setIcon(R.drawable.mybrary_icon)
+                        .setCancelable(false)
+                        .setMessage("Please explain the bug you have found in the application in as much detail as possible. We appreciate this gesture of yours!")
+                        .setPositiveButton("Report Bug", new DialogInterface.OnClickListener() {
+                            @Override
+                            public void onClick(DialogInterface dialogInterface, int i) {
+                                try {
+                                    GMailSender sender = new GMailSender(mybraryEmail, mybraryPassword);
+                                    sender.sendMail("Received Bug Report",
+                                            "A user has found a bug. : \n" + explainBug.getText().toString() + ". \n\t",
+                                            mybraryEmail,
+                                            mybraryEmail);
+                                } catch (Exception e) {
+                                    Log.e("SendMail", e.getMessage(), e);
+                                }
+                            }
+                        }) //Overridden in the onclick within show listener
+                        .setNegativeButton(android.R.string.cancel, new DialogInterface.OnClickListener() {
+                            @Override
+                            public void onClick(DialogInterface dialogInterface, int i) {
+                                reportBug.dismiss();
+                                reportBug.cancel();
+                            }
+                        })
+                        .create();
+                reportBug.show();
                 break;
             // change password option clicked under settings
             case R.id.changePassword:
@@ -1396,7 +1338,7 @@ public class LogInFragment extends Fragment {
         return true;
     }
 
-    public void disliked() {
+    private void disliked() {
         ArrayList<NameValuePair> nameValuePairs = new ArrayList<>();
 
         nameValuePairs.add(new BasicNameValuePair("bookId", bookId));

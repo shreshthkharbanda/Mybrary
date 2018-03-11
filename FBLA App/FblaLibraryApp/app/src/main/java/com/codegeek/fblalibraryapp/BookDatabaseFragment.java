@@ -13,7 +13,9 @@ import android.support.design.widget.FloatingActionButton;
 import android.support.design.widget.TextInputEditText;
 import android.support.v4.app.Fragment;
 import android.support.v4.widget.SwipeRefreshLayout;
+import android.support.v7.app.ActionBar;
 import android.support.v7.app.AlertDialog;
+import android.support.v7.app.AppCompatActivity;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.Menu;
@@ -22,9 +24,12 @@ import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.AdapterView;
+import android.widget.ArrayAdapter;
 import android.widget.EditText;
+import android.widget.ImageButton;
 import android.widget.ListAdapter;
 import android.widget.ListView;
+import android.widget.SearchView;
 import android.widget.SimpleAdapter;
 import android.widget.Toast;
 
@@ -51,8 +56,10 @@ import java.io.IOException;
 import java.io.InputStream;
 import java.io.InputStreamReader;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 import static android.app.Activity.RESULT_CANCELED;
 import static android.app.Activity.RESULT_OK;
@@ -92,6 +99,15 @@ public class BookDatabaseFragment extends Fragment {
     String bookIdCheckout = "";
     Barcode barcodeResult;
     TextInputEditText mEmailView;
+    HttpResponse httpResponse;
+    HttpClient httpClient;
+    HttpPost httpPost;
+    HttpEntity entity;
+    InputStream is;
+    String result3;
+    String line;
+
+    android.app.ActionBar actionBar;
     //    EditText userEmailEdit;
 //    String userEmail = new LogInFragment().mEmailView.getText().toString();
 
@@ -101,6 +117,8 @@ public class BookDatabaseFragment extends Fragment {
 
         rootView = inflater.inflate(R.layout.fragment_book_database, container, false);
         reserveBook = rootView.findViewById(R.id.reserveBook);
+//        TODO: add logic
+//        setHasOptionsMenu(true);
 
         listView = rootView.findViewById(R.id.listView);
 
@@ -141,19 +159,13 @@ public class BookDatabaseFragment extends Fragment {
                                         bookIdCheckout = bookIdEdit.getText().toString();
                                         scanToBook(bookIdCheckout);
                                         if (LogInFragment.sendLoggedIn()) {
-
-                                            Toast.makeText(getContext(), "Book ID: " + bookIdNumber +
-                                                    "\n" + "User\'s Name: " + LogInFragment.userName +
-                                                    "\n" + "Book Title: " + bookList.get(Integer.parseInt(bookIdNumber) - 1).get(TAG_TITLE) +
-                                                    "\n" + "User E-mail: " + LogInFragment.sendUserEmail() +
-                                                    "\n" + "Library ID: " + LogInFragment.sendLibraryId() +
-                                                    "\n" + "Author Last Name: " + authorLast +
-                                                    "\n" + "Book Category: " + category +
-                                                    "\n" + "Book Call Number: " + callNumber +
-                                                    "\n" + "Book Likes: " + likes +
-                                                    "\n" + "Book Description: " + description, Toast.LENGTH_LONG).show();
-                                            checkoutBook(bookIdNumber, LogInFragment.sendUserName(), bookList.get(Integer.parseInt(bookIdNumber) - 1).get(TAG_TITLE), LogInFragment.sendUserEmail(), LogInFragment.sendLibraryId(), authorLast, category, callNumber, likes, description);
-                                            Toast.makeText(getContext(), "Done checking out book", Toast.LENGTH_SHORT).show();
+                                            String checkoutResult = checkoutBook(bookIdNumber, LogInFragment.sendUserName(), bookList.get(Integer.parseInt(bookIdNumber) - 1).get(TAG_TITLE), LogInFragment.sendUserEmail(), LogInFragment.sendLibraryId(), authorLast, category, callNumber, likes, description);
+//                                            Toast.makeText(getContext(), checkoutResult, Toast.LENGTH_SHORT).show();
+                                            if (checkoutResult.trim().equalsIgnoreCase("Book already checked out")) {
+                                                Toast.makeText(getContext(), "The book you are trying to checkout is already checked out!", Toast.LENGTH_SHORT).show();
+                                            } else {
+                                                Toast.makeText(getContext(), "Book has successfully been checked out!", Toast.LENGTH_SHORT).show();
+                                            }
                                         } else {
                                             Toast.makeText(getContext(), "Please login before checking out a book!", Toast.LENGTH_SHORT).show();
                                         }
@@ -197,30 +209,7 @@ public class BookDatabaseFragment extends Fragment {
         listView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             @Override
             public void onItemClick(AdapterView<?> adapterView, View view, int i, long l) {
-                JSONObject c;
-                try {
-                    c = peoples.getJSONObject(i);
 
-                    id = c.getString(TAG_BOOK_ID);
-                    title = c.getString(TAG_TITLE);
-                    authorLast = c.getString(TAG_AUTHOR_LAST);
-                    category = c.getString(TAG_CATEGORY);
-                    callNumber = c.getString(TAG_CALL_NUMBER);
-                    likes = c.getString(TAG_LIKES);
-                    description = c.getString(TAG_DESCRIPTION);
-                } catch (JSONException e) {
-                    e.printStackTrace();
-                }
-
-                Intent intent = new Intent(getActivity(), UniversalBookInfo.class);
-                intent.putExtra("id", id);
-                intent.putExtra("title", title);
-                intent.putExtra("authorLast", authorLast);
-                intent.putExtra("category", category);
-                intent.putExtra("callNumber", callNumber);
-                intent.putExtra("likes", likes);
-                intent.putExtra("description", description);
-                startActivity(intent);
             }
         });
 
@@ -422,42 +411,53 @@ public class BookDatabaseFragment extends Fragment {
         return uppercaseLetter + string.substring(1).toLowerCase();
     }
 
-    private void checkoutBook(final String bookId, final String userName, final String bookTitle, final String email, final String libraryId, final String author, final String category, final String callNum, final String likes, final String description) {
-        class CheckoutBookAsync extends AsyncTask<String, Void, String> {
-            @Override
-            protected String doInBackground(String... params) {
-                List<NameValuePair> signUpPair = new ArrayList<>();
-                signUpPair.add(new BasicNameValuePair("bookId", bookId));
-                signUpPair.add(new BasicNameValuePair("userName", userName));
-                signUpPair.add(new BasicNameValuePair("bookTitle", bookTitle));
-                signUpPair.add(new BasicNameValuePair("userEmail", email));
-                signUpPair.add(new BasicNameValuePair("libraryId", libraryId));
-                signUpPair.add(new BasicNameValuePair("authorLast", author));
-                signUpPair.add(new BasicNameValuePair("bookCategory", category));
-                signUpPair.add(new BasicNameValuePair("bookCallNumber", callNum));
-                signUpPair.add(new BasicNameValuePair("bookLikes", likes));
-                signUpPair.add(new BasicNameValuePair("bookDescription", description));
+    private String checkoutBook(final String bookId, final String userName, final String bookTitle, final String email, final String libraryId, final String author, final String category, final String callNum, final String likes, final String description) {
+        List<NameValuePair> signUpPair = new ArrayList<>();
+        signUpPair.add(new BasicNameValuePair("bookId", bookId));
+        signUpPair.add(new BasicNameValuePair("userName", userName));
+        signUpPair.add(new BasicNameValuePair("bookTitle", bookTitle));
+        signUpPair.add(new BasicNameValuePair("userEmail", email));
+        signUpPair.add(new BasicNameValuePair("libraryId", libraryId));
+        signUpPair.add(new BasicNameValuePair("authorLast", author));
+        signUpPair.add(new BasicNameValuePair("bookCategory", category));
+        signUpPair.add(new BasicNameValuePair("bookCallNumber", callNum));
+        signUpPair.add(new BasicNameValuePair("bookLikes", likes));
+        signUpPair.add(new BasicNameValuePair("bookDescription", description));
 
-                try {
-                    HttpClient httpClient = new DefaultHttpClient();
-                    HttpPost httpPost = new HttpPost("http://ec2-52-41-161-91.us-west-2.compute.amazonaws.com/checkoutBook.php");
-                    httpPost.setEntity(new UrlEncodedFormEntity(signUpPair));
-                    HttpResponse httpResponse = httpClient.execute(httpPost);
-                    HttpEntity entity = httpResponse.getEntity();
+        try {
+            httpClient = new DefaultHttpClient();
+            httpPost = new HttpPost("http://ec2-52-41-161-91.us-west-2.compute.amazonaws.com/checkoutBook.php");
+            httpPost.setEntity(new UrlEncodedFormEntity(signUpPair));
+            httpResponse = httpClient.execute(httpPost);
+            entity = httpResponse.getEntity();
+            is = entity.getContent();
 
-                } catch (IOException e) {
-                    e.printStackTrace();
+            try {
+                BufferedReader reader = new BufferedReader
+                        (new InputStreamReader(is, "iso-8859-1"), 8);
+                StringBuilder sb = new StringBuilder();
+                while ((line = reader.readLine()) != null) {
+                    sb.append(line + "\n");
                 }
-                return "success";
-            }
-        }
-        CheckoutBookAsync checkoutBookAsync = new CheckoutBookAsync();
-        checkoutBookAsync.execute();
-    }
+                is.close();
+                result3 = sb.toString();
+                Log.e("pass 2", "connection success ");
+                Log.v("Result3------", "result should be in method:- " + result3);
 
+            } catch (Exception e) {
+                Log.e("Fail 2", e.toString());
+                e.printStackTrace();
+            }
+
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+        return result3;
+    }
 
     @Override
     public void onCreateOptionsMenu(Menu menu, MenuInflater inflater) {
+        inflater = getActivity().getMenuInflater();
         inflater.inflate(R.menu.account_menu, menu);
     }
 
@@ -478,5 +478,13 @@ public class BookDatabaseFragment extends Fragment {
                 break;
         }
         return true;
+    }
+
+    public static String[] convertToString(Object[] objectArray) {
+        String[] strArray = new String[objectArray.length];
+        for (int i = 0; i < objectArray.length; i++) {
+            strArray[i] = (String) objectArray[i];
+        }
+        return strArray;
     }
 }

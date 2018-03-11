@@ -21,10 +21,10 @@ public class UniversalBookInfo extends AppCompatActivity {
     Bundle bundle;
     String id;
     String title;
-    String firstName;
-    String lastName;
-    String category;
-    String callNumber;
+//    String firstName;
+//    String lastName;
+//    String category;
+//    String callNumber;
     String likes;
     String description;
 
@@ -42,12 +42,15 @@ public class UniversalBookInfo extends AppCompatActivity {
         } else {
             Log.e("UniversalBookInfo", "bookTitle is null");
         }
-        firstName = bundle.getString("firstName");
-        lastName = bundle.getString("lastName");
-        category = bundle.getString("category");
-        callNumber = bundle.getString("callNumber");
-        likes = bundle.getString("likes");
+        id = bundle.getString("bookId");
+        title = bundle.getString("bookTitle");
+//        firstName = bundle.getString("firstName");
+//        lastName = bundle.getString("lastName");
+//        category = bundle.getString("category");
+//        callNumber = bundle.getString("callNumber");
+        likes = bundle.getString("bookLikes");
         description = bundle.getString("description");
+
         bookTitle = findViewById(R.id.bookTitleUniversal);
         authorFirst = findViewById(R.id.authorFirstNameUniversal);
         authorLast = findViewById(R.id.authorLastNameUniversal);
@@ -59,30 +62,6 @@ public class UniversalBookInfo extends AppCompatActivity {
             bookTitle.setText(title);
         } catch (NullPointerException npe) {
             bookTitle.setText("");
-        }
-        try {
-            authorFirst.setText(firstName);
-        } catch (NullPointerException npe) {
-            authorFirst.setText("");
-        }
-        try {
-            authorLast.setText(lastName);
-        } catch (NullPointerException npe) {
-            authorLast.setText("");
-        }
-        try {
-            bookCategory.setText(category);
-        } catch (NullPointerException npe) {
-            bookCategory.setText("");
-        }
-        try {
-            if (callNumber.equals("null")) {
-                bookCallNumber.setText("");
-            } else {
-                bookCallNumber.setText("#" + callNumber);
-            }
-        } catch (NullPointerException npe) {
-            bookCallNumber.setText("");
         }
         try {
             bookLikes.setText("+" + likes);
