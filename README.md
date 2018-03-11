@@ -20,7 +20,7 @@ Application Features:
  - User Registration including initial signup, login, password reset and an option to stay logged-in.
  - Book Database to list all books with author's name, title, location, category and likes
  - Like Features: User can like the book by clicking the "like button" for books that the user has checked out and also can see the total number of likes
- - Reserve Book: Allows user to reserve/checkout the book by manually entering the book identification number or scanning the barcode of the book (the barcode should contain the book identification number)
+ - Reserve Book: Allows user to reserve/checkout the book by manually entering the book identification number or scanning the barcode of the book (the barcode's value should be the book identification number)
  - My Account: Shows all the checked out books by the logged in user, fine amount (if any), number of likes, checked out date and due date
  - Library Map: Visual map of the library to locate the book
  - Push Notifications: If book is overdue, the user gets the push notification on the device
@@ -28,7 +28,7 @@ Application Features:
  - Refresh - Swipe/Pull to refresh the current screen 
  
 
-User Interface Layer: This layer is the front end of the application for users to interact with the Library Management System
+User Interface Layer:`	 This layer is the front end of the application for users to interact with the Library Management System
 Technologies Used:
   - Compatible Devices: Android based Mobile/Tablets
   - Language: Java/XML
