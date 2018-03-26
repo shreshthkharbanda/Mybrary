@@ -209,9 +209,20 @@ public class BookDatabaseFragment extends Fragment {
         listView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             @Override
             public void onItemClick(AdapterView<?> adapterView, View view, int i, long l) {
+
+                try {
+                    JSONObject c = peoples.getJSONObject(i);
+                    title = c.getString(TAG_TITLE);
+                    authorLast = c.getString(TAG_AUTHOR_LAST);
+                    category = c.getString(TAG_CATEGORY);
+                    likes = c.getString(TAG_LIKES);
+                } catch (JSONException je) {
+                    je.printStackTrace();
+                }
+
                 Intent sendIntent = new Intent();
                 sendIntent.setAction(Intent.ACTION_SEND);
-                sendIntent.putExtra(Intent.EXTRA_TEXT, "Checkout \"" + title + "\" on Mybrary!");
+                sendIntent.putExtra(Intent.EXTRA_TEXT, "Checkout \"" + title + "\" on Mybrary! It is written by " + authorLast + "! Additionally, it has " + likes + "likes! The book fits into the " + category + "categories.");
                 sendIntent.setType("text/plain");
                 startActivity(sendIntent);
             }
