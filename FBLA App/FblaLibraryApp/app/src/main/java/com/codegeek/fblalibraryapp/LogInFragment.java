@@ -524,7 +524,7 @@ public class LogInFragment extends Fragment {
 
                 Intent sendIntent = new Intent();
                 sendIntent.setAction(Intent.ACTION_SEND);
-                sendIntent.putExtra(Intent.EXTRA_TEXT, "Checkout \"" + title + "\" on Mybrary! I checked this book out and would definitely recommend this great book! It has " + likes + "likes! I should return the book by " + dateDue + " if you would like to check it out.");
+                sendIntent.putExtra(Intent.EXTRA_TEXT, "Checkout \"" + title + "\" on Mybrary! I checked this book out and would definitely recommend this great book! It has " + likes + " likes! I should return the book by " + dateDue + " if you would like to check it out.");
                 sendIntent.setType("text/plain");
                 startActivity(sendIntent);
             }

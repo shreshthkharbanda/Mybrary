@@ -209,7 +209,6 @@ public class BookDatabaseFragment extends Fragment {
         listView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             @Override
             public void onItemClick(AdapterView<?> adapterView, View view, int i, long l) {
-
                 try {
                     JSONObject c = peoples.getJSONObject(i);
                     title = c.getString(TAG_TITLE);
@@ -222,7 +221,7 @@ public class BookDatabaseFragment extends Fragment {
 
                 Intent sendIntent = new Intent();
                 sendIntent.setAction(Intent.ACTION_SEND);
-                sendIntent.putExtra(Intent.EXTRA_TEXT, "Checkout \"" + title + "\" on Mybrary! It is written by " + authorLast + "! Additionally, it has " + likes + "likes! The book fits into the " + category + "categories.");
+                sendIntent.putExtra(Intent.EXTRA_TEXT, "Checkout \"" + title + "\" on Mybrary! It is written by " + authorLast + "! Additionally, it has " + likes + " likes! The book fits into the " + category + " categories.");
                 sendIntent.setType("text/plain");
                 startActivity(sendIntent);
             }
