@@ -25,7 +25,8 @@ Application Features:
  - Library Map: Visual map of the library to locate the book
  - Push Notifications: If book is overdue, the user gets the push notification on the device
  - Email Notifications: Password reset instructions
- - Refresh - Swipe/Pull to refresh the current screen 
+ - Refresh - Swipe/Pull to refresh the current screen
+ - Share book information with multi0ple social media platforms.
  
 
 User Interface Layer:`	 This layer is the front end of the application for users to interact with the Library Management System
