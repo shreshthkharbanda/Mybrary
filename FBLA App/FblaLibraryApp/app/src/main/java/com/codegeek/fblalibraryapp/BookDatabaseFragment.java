@@ -493,12 +493,4 @@ public class BookDatabaseFragment extends Fragment {
         }
         return true;
     }
-
-    public static String[] convertToString(Object[] objectArray) {
-        String[] strArray = new String[objectArray.length];
-        for (int i = 0; i < objectArray.length; i++) {
-            strArray[i] = (String) objectArray[i];
-        }
-        return strArray;
-    }
 }

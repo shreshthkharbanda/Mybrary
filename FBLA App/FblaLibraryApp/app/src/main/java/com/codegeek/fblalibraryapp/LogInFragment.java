@@ -80,6 +80,7 @@ import java.util.Random;
 import static android.content.Context.MODE_PRIVATE;
 
 @SuppressWarnings("ConstantConditions")
+@SuppressLint("StaticFieldLeak")
 public class LogInFragment extends Fragment {
 
     static TextInputEditText mEmailView;
@@ -544,7 +545,6 @@ public class LogInFragment extends Fragment {
                 String dataUrl = "http://ec2-52-41-161-91.us-west-2.compute.amazonaws.com/booksCheckedOut.php";
 
                 try {
-
                     HttpClient httpclient = new DefaultHttpClient();
                     httpPost = new HttpPost(dataUrl);
                     String json1;
