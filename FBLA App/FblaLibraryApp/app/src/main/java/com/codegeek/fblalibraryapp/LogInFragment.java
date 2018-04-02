@@ -416,7 +416,7 @@ public class LogInFragment extends Fragment {
                             Toast.makeText(getContext(), "That email already exists!", Toast.LENGTH_SHORT).show();
                         }
                     } else {
-                        registerUser(libraryId.getText().toString(), signUpFirst.getText().toString() + " " + signUpLast.getText().toString(),
+                        registerUser(libraryId.getText().toString(), signUpFirst.getText().toString(), signUpLast.getText().toString(),
                                 signUpEmail.getText().toString(), signUpPassword.getText().toString(), signUpPhone.getText().toString(),
                                 "http://ec2-52-41-161-91.us-west-2.compute.amazonaws.com/signUpLibrary.php");
 
@@ -1016,11 +1016,11 @@ public class LogInFragment extends Fragment {
             protected String doInBackground(String... params) {
                 List<NameValuePair> signUpPair = new ArrayList<>();
                 signUpPair.add(new BasicNameValuePair("libraryIdSignup", args[0]));
-//                signUpPair.add(new BasicNameValuePair("userFirstName", args[1]));
-                signUpPair.add(new BasicNameValuePair("userName", args[1]));
-                signUpPair.add(new BasicNameValuePair("userEmail", args[2]));
-                signUpPair.add(new BasicNameValuePair("userPassword", args[3]));
-                signUpPair.add(new BasicNameValuePair("userPhoneNumber", args[4]));
+                signUpPair.add(new BasicNameValuePair("userFirstName", args[1]));
+                signUpPair.add(new BasicNameValuePair("userLastName", args[2]));
+                signUpPair.add(new BasicNameValuePair("userEmail", args[3]));
+                signUpPair.add(new BasicNameValuePair("userPassword", args[4]));
+                signUpPair.add(new BasicNameValuePair("userPhoneNumber", args[5]));
 
                 try {
                     HttpClient httpClient = new DefaultHttpClient();
