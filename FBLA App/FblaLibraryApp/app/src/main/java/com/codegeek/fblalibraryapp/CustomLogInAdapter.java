@@ -113,7 +113,6 @@ public class CustomLogInAdapter extends SimpleAdapter {
                 liked = "1";
                 updateLikes(context, arrayList.get(position).get(TAG_BOOK_ID), "http://ec2-52-41-161-91.us-west-2.compute.amazonaws.com/updateLikes.php");
                 updateBooleanLiked(context, arrayList.get(position).get(TAG_BOOK_ID), "1");
-                Toast.makeText(context, "After Liked: " + arrayList.get(position).get(TAG_BOOLEAN_LIKED), Toast.LENGTH_SHORT).show();
 
                 new LogInFragment().refreshListAccount.post(new Runnable() {
                     @Override
@@ -137,7 +136,6 @@ public class CustomLogInAdapter extends SimpleAdapter {
                 liked = "0";
                 updateLikes(context, arrayList.get(position).get(TAG_BOOK_ID), "http://ec2-52-41-161-91.us-west-2.compute.amazonaws.com/updateLikesNegative.php");
                 updateBooleanLiked(context, arrayList.get(position).get(TAG_BOOK_ID), "0");
-                Toast.makeText(context, "After UnLiked: " + arrayList.get(position).get(TAG_BOOLEAN_LIKED), Toast.LENGTH_SHORT).show();
 
                 new LogInFragment().refreshListAccount.post(new Runnable() {
                     @Override

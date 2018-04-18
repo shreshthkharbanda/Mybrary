@@ -286,6 +286,66 @@ public class LogInFragment extends Fragment {
         singleBookInfo = inflater.inflate(R.layout.activity_universal_book_info, container, false);
 
 
+        signUp.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                if (libraryId.getText().toString().length() == 6 && (signUpPassword.getText().toString().equals(signUpPassword2.getText().toString()) && !(signUpFirst == null)
+                        && !(signUpLast == null) && !(signUpEmail == null) && !(signUpPassword == null)
+                        && !(signUpPassword2 == null) && !(signUpPhone == null)) &&
+                        (signUpPassword.getText().toString().equals(signUpPassword2.getText().toString())) &&
+                        (Patterns.EMAIL_ADDRESS.matcher(signUpEmail.getText().toString()).matches()) &&
+                        (Patterns.PHONE.matcher(signUpPhone.getText().toString()).matches())) {
+                    if (result != null) {
+                        if (result.equalsIgnoreCase("Failed")) {
+                            Toast.makeText(getContext(), "That email already exists!", Toast.LENGTH_SHORT).show();
+                        } else if (result.equalsIgnoreCase("failure")) {
+                            Toast.makeText(getContext(), "That email already exists!", Toast.LENGTH_SHORT).show();
+                        } else {
+                            if (libraryId.getText().toString().equals("") && signUpPassword.getText().toString().equals("") && signUpPassword2.getText().toString().equals("") &&
+                                    signUpFirst.getText().toString().equals("") && signUpLast.getText().toString().equals("") && signUpEmail.getText().toString().equals("") &&
+                                    signUpPassword.getText().toString().equals("") && signUpPassword2.getText().toString().equals("") &&
+                                    signUpPhone.getText().toString().equals("")) {
+                                Toast.makeText(getContext(), "Please fill out all forms!", Toast.LENGTH_SHORT).show();
+                            }
+                            if (!(signUpPassword.getText().toString().equals(signUpPassword2.getText().toString()))) {
+                                Toast.makeText(getContext(), "Please make sure the passwords both match!", Toast.LENGTH_SHORT).show();
+                            }
+                            if (!(Patterns.EMAIL_ADDRESS.matcher(signUpEmail.getText().toString()).matches())) {
+                                Toast.makeText(getContext(), "Please make sure the email address is valid!", Toast.LENGTH_SHORT).show();
+                            }
+                            if (!(Patterns.PHONE.matcher(signUpPhone.getText().toString()).matches())) {
+                                Toast.makeText(getContext(), "Please make sure the phone number is valid!", Toast.LENGTH_SHORT).show();
+                            }
+                            if (!(libraryId.getText().toString().length() == 6)) {
+                                Toast.makeText(getContext(), "Please enter a valid library ID!", Toast.LENGTH_SHORT).show();
+                            } else {
+                                registerUser(libraryId.getText().toString(), signUpFirst.getText().toString(), signUpLast.getText().toString(),
+                                        signUpEmail.getText().toString(), signUpPassword.getText().toString(), signUpPhone.getText().toString(),
+                                        "http://ec2-52-41-161-91.us-west-2.compute.amazonaws.com/signUpLibrary.php");
+
+                                logInLayout.setVisibility(View.VISIBLE);
+                                accountLayout.setVisibility(View.GONE);
+                                logOutButton.setVisibility(View.GONE);
+                                signUpLayout.setVisibility(View.GONE);
+                                Toast.makeText(getContext(), "Account Successfully Created!", Toast.LENGTH_SHORT).show();
+                            }
+                        }
+                    } else {
+                        Toast.makeText(getContext(), "Last else", Toast.LENGTH_SHORT).show();
+                        registerUser(libraryId.getText().toString(), signUpFirst.getText().toString(), signUpLast.getText().toString(),
+                                signUpEmail.getText().toString(), signUpPassword.getText().toString(), signUpPhone.getText().toString(),
+                                "http://ec2-52-41-161-91.us-west-2.compute.amazonaws.com/signUpLibrary.php");
+
+                        logInLayout.setVisibility(View.VISIBLE);
+                        accountLayout.setVisibility(View.GONE);
+                        logOutButton.setVisibility(View.GONE);
+                        signUpLayout.setVisibility(View.GONE);
+                        Toast.makeText(getContext(), "Account Successfully Created!", Toast.LENGTH_SHORT).show();
+                    }
+                }
+            }
+        });
+
         createAccount.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
@@ -397,53 +457,6 @@ public class LogInFragment extends Fragment {
                     accountLayout.setVisibility(View.GONE);
                     accountLayout.setVisibility(View.GONE);
                     signUpLayout.setVisibility(View.VISIBLE);
-                }
-            }
-        });
-        signUp.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                if (libraryId.getText().toString().length() == 6 && (signUpPassword.getText().toString().equals(signUpPassword2.getText().toString()) && !(signUpFirst == null)
-                        && !(signUpLast == null) && !(signUpEmail == null) && !(signUpPassword == null)
-                        && !(signUpPassword2 == null) && !(signUpPhone == null)) &&
-                        (signUpPassword.getText().toString().equals(signUpPassword2.getText().toString())) &&
-                        (Patterns.EMAIL_ADDRESS.matcher(signUpEmail.getText().toString()).matches()) &&
-                        (Patterns.PHONE.matcher(signUpPhone.getText().toString()).matches())) {
-                    if (result != null) {
-                        if (result.equalsIgnoreCase("Failed")) {
-                            Toast.makeText(getContext(), "That email already exists!", Toast.LENGTH_SHORT).show();
-                        } else if (result.equalsIgnoreCase("failure")) {
-                            Toast.makeText(getContext(), "That email already exists!", Toast.LENGTH_SHORT).show();
-                        }
-                    } else {
-                        registerUser(libraryId.getText().toString(), signUpFirst.getText().toString(), signUpLast.getText().toString(),
-                                signUpEmail.getText().toString(), signUpPassword.getText().toString(), signUpPhone.getText().toString(),
-                                "http://ec2-52-41-161-91.us-west-2.compute.amazonaws.com/signUpLibrary.php");
-
-                        logInLayout.setVisibility(View.VISIBLE);
-                        accountLayout.setVisibility(View.GONE);
-                        logOutButton.setVisibility(View.GONE);
-                        signUpLayout.setVisibility(View.GONE);
-                    }
-                } else {
-                    if (libraryId.getText().toString().equals("") && signUpPassword.getText().toString().equals("") && signUpPassword2.getText().toString().equals("") &&
-                            signUpFirst.getText().toString().equals("") && signUpLast.getText().toString().equals("") && signUpEmail.getText().toString().equals("") &&
-                            signUpPassword.getText().toString().equals("") && signUpPassword2.getText().toString().equals("") &&
-                            signUpPhone.getText().toString().equals("")) {
-                        Toast.makeText(getContext(), "Please fill out all forms!", Toast.LENGTH_SHORT).show();
-                    }
-                    if (!(signUpPassword.getText().toString().equals(signUpPassword2.getText().toString()))) {
-                        Toast.makeText(getContext(), "Please make sure the passwords both match!", Toast.LENGTH_SHORT).show();
-                    }
-                    if (!(Patterns.EMAIL_ADDRESS.matcher(signUpEmail.getText().toString()).matches())) {
-                        Toast.makeText(getContext(), "Please make sure the email address is valid!", Toast.LENGTH_SHORT).show();
-                    }
-                    if (!(Patterns.PHONE.matcher(signUpPhone.getText().toString()).matches())) {
-                        Toast.makeText(getContext(), "Please make sure the phone number is valid!", Toast.LENGTH_SHORT).show();
-                    }
-                    if (!(libraryId.getText().toString().length() == 6)) {
-                        Toast.makeText(getContext(), "Please enter a valid library ID!", Toast.LENGTH_SHORT).show();
-                    }
                 }
             }
         });
@@ -1071,6 +1084,7 @@ public class LogInFragment extends Fragment {
         SignUpAsync signUpAsync = new SignUpAsync();
         signUpAsync.execute();
     }
+
     public void updatePassword(String email, String updatePassword) {
         ArrayList<NameValuePair> nameValuePairs = new ArrayList<>();
 
