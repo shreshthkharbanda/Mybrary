@@ -2,19 +2,15 @@
 <menu xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto">
     <item
-        android:id="@+id/profileSettings"
-        android:icon="@drawable/profile_icon"
+        android:id="@+id/changePassword"
+        android:icon="@drawable/change_pass_icon"
         android:orderInCategory="100"
-        android:title="@string/profile"
+        android:title="@string/change_password"
         app:showAsAction="always" />
     <item
-        android:id="@+id/settingsGroup"
-        android:title="">
-        <item
-            android:title="@string/change_password"
-            android:id="@+id/changePassword"/>
-        <item
-            android:title="@string/report_bug"
-            android:id="@+id/reportBug"/>
-    </item>
+        android:id="@+id/reportBug"
+        android:icon="@drawable/report_bug"
+        android:orderInCategory="100"
+        android:title="@string/report_bug"
+        app:showAsAction="always" />
 </menu>

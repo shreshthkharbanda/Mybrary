@@ -52,7 +52,6 @@ public class SwipeViewActivity extends AppCompatActivity implements
         actionBar.setNavigationMode(ActionBar.NAVIGATION_MODE_TABS);
 
         opened = true;
-        splashScreen();
         setUpTabs();
     }
 
@@ -66,6 +65,7 @@ public class SwipeViewActivity extends AppCompatActivity implements
     @Override
     protected void onStart() {
         super.onStart();
+        splashScreen();
         opened = true;
     }
 

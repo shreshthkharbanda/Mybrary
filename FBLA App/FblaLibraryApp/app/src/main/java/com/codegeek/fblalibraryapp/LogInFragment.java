@@ -133,7 +133,7 @@ public class LogInFragment extends Fragment {
     String line = null;
     int code;
     TextView checkedOut;
-    static Boolean loggedIn = false;
+    public static Boolean loggedIn = false;
     public static SwipeRefreshLayout refreshListAccount;
 
     ArrayList<String> stringArray = new ArrayList<>();
@@ -202,13 +202,13 @@ public class LogInFragment extends Fragment {
     TextView forgotPassword;
     String forgotPasswordEmail = "";
     final String mybraryEmail = "mybraryHelp@gmail.com";
-    final String mybraryPassword = "MybraryLibrary";
+    final String mybraryPassword = "MybraryPassword";
     StringBuilder newPassword;
     String updatePasswordResult;
     EditText newPasswordEdit;
     EditText oldPasswordEdit;
     EditText confirmPasswordEdit;
-    View updatePasswordView;
+    View changePassView;
     View reportBugView;
     EditText explainBug;
     AlertDialog.Builder alertDialogBuilder;
@@ -248,10 +248,10 @@ public class LogInFragment extends Fragment {
         stayLoggedIn = logInView.findViewById(R.id.stayLoggedIn);
         forgotPassword = logInView.findViewById(R.id.forgotPassword);
 
-        updatePasswordView = inflater.inflate(R.layout.change_password_dialog_layout, container, false);
-        oldPasswordEdit = updatePasswordView.findViewById(R.id.oldPassword);
-        newPasswordEdit = updatePasswordView.findViewById(R.id.newPassword);
-        confirmPasswordEdit = updatePasswordView.findViewById(R.id.confirmPassword);
+        changePassView = inflater.inflate(R.layout.change_password_dialog_layout, container, false);
+        oldPasswordEdit = changePassView.findViewById(R.id.oldPassword);
+        newPasswordEdit = changePassView.findViewById(R.id.newPassword);
+        confirmPasswordEdit = changePassView.findViewById(R.id.confirmPassword);
 
         reportBugView = inflater.inflate(R.layout.report_bug_layout, container, false);
         explainBug = reportBugView.findViewById(R.id.explainBug);
@@ -1203,42 +1203,44 @@ public class LogInFragment extends Fragment {
 
         @Override
         protected void onPostExecute(final String insideResult) {
-            getActivity().runOnUiThread(new Runnable() {
-                @Override
-                public void run() {
-                    Handler mHandler = new Handler();
-                    mHandler.postDelayed(new Runnable() {
-                        @Override
-                        public void run() {
-                            pdLoading.dismiss();
-                            if (mEmailView.getText().toString().equals("") || mPasswordView.getText().toString().equals("")) {
-                                Toast.makeText(getContext(), "Invalid credentials... Please try again", Toast.LENGTH_LONG).show();
-                                changePassValid = false;
-                            } else if (insideResult.equalsIgnoreCase("true")) {
-                                Log.v("onPostExecuteLine-1458", insideResult);
-                                updatePassword(mEmailView.getText().toString(), newPasswordEdit.getText().toString());
-                                changePassValid = true;
-                                try {
-                                    loggedInEditor.clear().commit();
-                                } catch (NullPointerException ignored) {
-                                }
-                                saveUsername.setChecked(false);
-                                savePassword.setChecked(false);
-                                stayLoggedIn.setChecked(false);
-                            } else if (insideResult.equalsIgnoreCase("false")) {
-                                Toast.makeText(getContext(), "Invalid password... Please try again", Toast.LENGTH_LONG).show();
-                                changePassValid = false;
+            if (getActivity() != null) {
+                getActivity().runOnUiThread(new Runnable() {
+                    @Override
+                    public void run() {
+                        Handler mHandler = new Handler();
+                        mHandler.postDelayed(new Runnable() {
+                            @Override
+                            public void run() {
+                                pdLoading.dismiss();
+                                if (mEmailView.getText().toString().equals("") || mPasswordView.getText().toString().equals("")) {
+                                    Toast.makeText(getContext(), "Invalid credentials... Please try again", Toast.LENGTH_LONG).show();
+                                    changePassValid = false;
+                                } else if (insideResult.equalsIgnoreCase("true")) {
+                                    Log.v("onPostExecuteLine-1458", insideResult);
+                                    updatePassword(mEmailView.getText().toString(), newPasswordEdit.getText().toString());
+                                    changePassValid = true;
+                                    try {
+                                        loggedInEditor.clear().commit();
+                                    } catch (NullPointerException ignored) {
+                                    }
+                                    saveUsername.setChecked(false);
+                                    savePassword.setChecked(false);
+                                    stayLoggedIn.setChecked(false);
+                                } else if (insideResult.equalsIgnoreCase("false")) {
+                                    Toast.makeText(getContext(), "Invalid password... Please try again", Toast.LENGTH_LONG).show();
+                                    changePassValid = false;
 
-                            } else if (insideResult.equalsIgnoreCase("exception") || insideResult.equalsIgnoreCase("unsuccessful")) {
-                                Toast.makeText(getContext(), "Please check your internet then try again.", Toast.LENGTH_LONG).show();
-                                changePassValid = false;
-                            } else {
-                                changePassValid = false;
+                                } else if (insideResult.equalsIgnoreCase("exception") || insideResult.equalsIgnoreCase("unsuccessful")) {
+                                    Toast.makeText(getContext(), "Please check your internet then try again.", Toast.LENGTH_LONG).show();
+                                    changePassValid = false;
+                                } else {
+                                    changePassValid = false;
+                                }
                             }
-                        }
-                    }, 1500);
-                }
-            });
+                        }, 1500);
+                    }
+                });
+            }
         }
     }
 
@@ -1250,10 +1252,10 @@ public class LogInFragment extends Fragment {
     @RequiresApi(api = Build.VERSION_CODES.LOLLIPOP)
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
+
         switch (item.getItemId()) {
             // profile settings icon clicked
             case R.id.reportBug:
-//                Toast.makeText(getContext(), "Report Bug", Toast.LENGTH_SHORT).show();
                 reportBug = new AlertDialog.Builder(getContext())
                         .setView(reportBugView)
                         .setTitle("Report Bug")
@@ -1282,12 +1284,15 @@ public class LogInFragment extends Fragment {
                             }
                         })
                         .create();
+                if (reportBugView.getParent() != null) {
+                    ((ViewGroup) reportBugView.getParent()).removeView(reportBugView);
+                }
                 reportBug.show();
                 break;
             // change password option clicked under settings
             case R.id.changePassword:
                 final AlertDialog changePassDialog = new AlertDialog.Builder(getContext())
-                        .setView(updatePasswordView)
+                        .setView(changePassView)
                         .setTitle("Change Password")
                         .setIcon(R.drawable.mybrary_icon)
                         .setCancelable(false)
@@ -1323,57 +1328,14 @@ public class LogInFragment extends Fragment {
                         });
                     }
                 });
+                if (changePassView.getParent() != null) {
+                    ((ViewGroup) changePassView.getParent()).removeView(changePassView);
+                }
                 changePassDialog.show();
                 break;
             default:
                 break;
         }
         return true;
-    }
-
-    private void disliked() {
-        ArrayList<NameValuePair> nameValuePairs = new ArrayList<>();
-
-        nameValuePairs.add(new BasicNameValuePair("bookId", bookId));
-
-        try {
-            HttpClient httpclient = new DefaultHttpClient();
-            HttpPost httppost = new HttpPost("http://ec2-52-41-161-91.us-west-2.compute.amazonaws.com/disliked.php");
-            httppost.setEntity(new UrlEncodedFormEntity(nameValuePairs));
-            HttpResponse response = httpclient.execute(httppost);
-            HttpEntity entity = response.getEntity();
-            is = entity.getContent();
-            Log.e("pass 1", "connection success ");
-        } catch (Exception e) {
-            Log.e("Fail 1", e.toString());
-            Toast.makeText(getContext(), "Invalid IP Address", Toast.LENGTH_LONG).show();
-        }
-
-        try {
-            BufferedReader reader = new BufferedReader
-                    (new InputStreamReader(is, "iso-8859-1"), 8);
-            StringBuilder sb = new StringBuilder();
-            while ((line = reader.readLine()) != null) {
-                sb.append(line + "\n");
-            }
-            is.close();
-            result = sb.toString();
-            Log.e("pass 2", "connection success");
-        } catch (Exception e) {
-            Log.e("Fail 2", e.toString());
-        }
-
-        try {
-            JSONObject json_data = new JSONObject(result);
-            code = (json_data.getInt("code"));
-
-            if (code == 1) {
-                Toast.makeText(getContext(), "Update Successful!", Toast.LENGTH_SHORT).show();
-            } else {
-                Toast.makeText(getContext(), "Sorry, Please try Again.", Toast.LENGTH_LONG).show();
-            }
-        } catch (Exception e) {
-            Log.e("Fail 3", e.toString());
-        }
     }
 }

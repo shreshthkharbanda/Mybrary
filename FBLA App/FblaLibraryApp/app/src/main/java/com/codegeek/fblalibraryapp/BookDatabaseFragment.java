@@ -9,13 +9,12 @@ import android.os.Build;
 import android.os.Bundle;
 import android.os.Handler;
 import android.support.annotation.NonNull;
+import android.support.annotation.RequiresApi;
 import android.support.design.widget.FloatingActionButton;
 import android.support.design.widget.TextInputEditText;
 import android.support.v4.app.Fragment;
 import android.support.v4.widget.SwipeRefreshLayout;
-import android.support.v7.app.ActionBar;
 import android.support.v7.app.AlertDialog;
-import android.support.v7.app.AppCompatActivity;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.Menu;
@@ -24,12 +23,10 @@ import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.AdapterView;
-import android.widget.ArrayAdapter;
+import android.widget.Button;
 import android.widget.EditText;
-import android.widget.ImageButton;
 import android.widget.ListAdapter;
 import android.widget.ListView;
-import android.widget.SearchView;
 import android.widget.SimpleAdapter;
 import android.widget.Toast;
 
@@ -56,13 +53,13 @@ import java.io.IOException;
 import java.io.InputStream;
 import java.io.InputStreamReader;
 import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.HashMap;
 import java.util.List;
-import java.util.Map;
+import java.util.Objects;
 
 import static android.app.Activity.RESULT_CANCELED;
 import static android.app.Activity.RESULT_OK;
+import static android.content.Context.MODE_PRIVATE;
 
 @SuppressWarnings("ConstantConditions")
 public class BookDatabaseFragment extends Fragment {
@@ -74,7 +71,6 @@ public class BookDatabaseFragment extends Fragment {
     public String TAG_AUTHOR_LAST = "authorLastName";
     public String TAG_CATEGORY = "bookCategory";
     public String TAG_CALL_NUMBER = "bookCallNumber";
-    public String TAG_STATUS = "bookStatus";
     public String TAG_LIKES = "numberOfLikes";
     public String TAG_DESCRIPTION = "bookDescription";
     JSONArray peoples;
@@ -107,7 +103,16 @@ public class BookDatabaseFragment extends Fragment {
     String result3;
     String line;
 
-    android.app.ActionBar actionBar;
+    EditText newPasswordEdit;
+    EditText oldPasswordEdit;
+    EditText confirmPasswordEdit;
+    View changePassView;
+    View reportBugView;
+    EditText explainBug;
+    final String mybraryEmail = "mybraryHelp@gmail.com";
+    final String mybraryPassword = "MybraryPassword";
+    AlertDialog reportBug;
+
     //    EditText userEmailEdit;
 //    String userEmail = new LogInFragment().mEmailView.getText().toString();
 
@@ -117,8 +122,21 @@ public class BookDatabaseFragment extends Fragment {
 
         rootView = inflater.inflate(R.layout.fragment_book_database, container, false);
         reserveBook = rootView.findViewById(R.id.reserveBook);
-//        TODO: add logic
-//        setHasOptionsMenu(true);
+
+        changePassView = inflater.inflate(R.layout.change_password_dialog_layout, container, false);
+        oldPasswordEdit = changePassView.findViewById(R.id.oldPassword);
+        newPasswordEdit = changePassView.findViewById(R.id.newPassword);
+        confirmPasswordEdit = changePassView.findViewById(R.id.confirmPassword);
+
+        reportBugView = inflater.inflate(R.layout.report_bug_layout, container, false);
+        explainBug = reportBugView.findViewById(R.id.explainBug);
+
+        new LogInFragment();
+        if (LogInFragment.loggedIn) {
+            setHasOptionsMenu(true);
+        } else {
+            setHasOptionsMenu(true);
+        }
 
         listView = rootView.findViewById(R.id.listView);
 
@@ -134,8 +152,8 @@ public class BookDatabaseFragment extends Fragment {
                 } else {
                     builder = new AlertDialog.Builder(getContext());
                 }
-                builder.setTitle("Checkout Book")
-                        .setMessage("How would you like to checkout this book?")
+                builder.setTitle("Reserve Book")
+                        .setMessage("How would you like to reserve this book?")
                         .setPositiveButton("Scan Book", new DialogInterface.OnClickListener() {
                             public void onClick(DialogInterface dialog, int which) {
                                 // scan book
@@ -152,9 +170,9 @@ public class BookDatabaseFragment extends Fragment {
 
                                 final EditText bookIdEdit = dialogView.findViewById(R.id.bookIdCheckoutEdit);
 
-                                dialogBuilder.setTitle("Checkout Book");
+                                dialogBuilder.setTitle("Reserve Book");
                                 dialogBuilder.setMessage("Enter Book ID below");
-                                dialogBuilder.setPositiveButton("Checkout Book", new DialogInterface.OnClickListener() {
+                                dialogBuilder.setPositiveButton("Reserve Book", new DialogInterface.OnClickListener() {
                                     public void onClick(DialogInterface dialog, int whichButton) {
                                         bookIdCheckout = bookIdEdit.getText().toString();
                                         scanToBook(bookIdCheckout);
@@ -221,13 +239,14 @@ public class BookDatabaseFragment extends Fragment {
 
                 Intent sendIntent = new Intent();
                 sendIntent.setAction(Intent.ACTION_SEND);
-                sendIntent.putExtra(Intent.EXTRA_TEXT, "Checkout \"" + title + "\" on Mybrary! It is written by " + authorLast + "! Additionally, it has " + likes + " likes! The book fits into the " + category + " categories.");
+                sendIntent.putExtra(Intent.EXTRA_TEXT, "Go see \"" + title + "\" on Mybrary! It is written by " + authorLast + "! Additionally, it has " + likes + " likes! The book fits into the " + category + " categories.");
                 sendIntent.setType("text/plain");
                 startActivity(sendIntent);
             }
         });
 
         getAllBooks();
+
         return rootView;
     }
 
@@ -451,7 +470,7 @@ public class BookDatabaseFragment extends Fragment {
                         (new InputStreamReader(is, "iso-8859-1"), 8);
                 StringBuilder sb = new StringBuilder();
                 while ((line = reader.readLine()) != null) {
-                    sb.append(line + "\n");
+                    sb.append(line).append("\n");
                 }
                 is.close();
                 result3 = sb.toString();
@@ -471,22 +490,47 @@ public class BookDatabaseFragment extends Fragment {
 
     @Override
     public void onCreateOptionsMenu(Menu menu, MenuInflater inflater) {
-        inflater = getActivity().getMenuInflater();
-        inflater.inflate(R.menu.account_menu, menu);
+        inflater.inflate(R.menu.general_menu, menu);
     }
 
+    @RequiresApi(api = Build.VERSION_CODES.LOLLIPOP)
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
         switch (item.getItemId()) {
             // profile settings icon clicked
             case R.id.reportBug:
-                Toast.makeText(getContext(), "Report Bug", Toast.LENGTH_SHORT)
-                        .show();
-                break;
-            // change password option clicked under settings
-            case R.id.changePassword:
-                Toast.makeText(getContext(), "Settings selected", Toast.LENGTH_SHORT)
-                        .show();
+                reportBug = new AlertDialog.Builder(getContext())
+                        .setView(reportBugView)
+                        .setTitle("Report Bug")
+                        .setIcon(R.drawable.mybrary_icon)
+                        .setCancelable(false)
+                        .setMessage("Please explain the bug you have found in the application in as much detail as possible. We appreciate this gesture of yours!")
+                        .setPositiveButton("Report Bug", new DialogInterface.OnClickListener() {
+                            @Override
+                            public void onClick(DialogInterface dialogInterface, int i) {
+                                try {
+                                    GMailSender sender = new GMailSender(mybraryEmail, mybraryPassword);
+                                    sender.sendMail("Received Bug Report",
+                                            "A user has found a bug. : \n" + explainBug.getText().toString() + ". \n\t",
+                                            mybraryEmail,
+                                            mybraryEmail);
+                                } catch (Exception e) {
+                                    Log.e("SendMail", e.getMessage(), e);
+                                }
+                            }
+                        }) //Overridden in the onclick within show listener
+                        .setNegativeButton(android.R.string.cancel, new DialogInterface.OnClickListener() {
+                            @Override
+                            public void onClick(DialogInterface dialogInterface, int i) {
+                                reportBug.dismiss();
+                                reportBug.cancel();
+                            }
+                        })
+                        .create();
+                if (reportBugView.getParent() != null) {
+                    ((ViewGroup) reportBugView.getParent()).removeView(reportBugView);
+                }
+                reportBug.show();
                 break;
             default:
                 break;
