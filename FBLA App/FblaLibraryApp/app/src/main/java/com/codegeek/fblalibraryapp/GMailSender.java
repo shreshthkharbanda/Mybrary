@@ -21,11 +21,14 @@ import java.security.Security;
 import java.util.Properties;
 
 public class GMailSender extends javax.mail.Authenticator {
+
+//  Define variables
     private String mailhost = "smtp.gmail.com";
     private String user;
     private String password;
     private Session session;
 
+//  Add JSSEProvider class as a security provider
     static {
         Security.addProvider(new JSSEProvider());
     }
@@ -81,7 +84,7 @@ public class GMailSender extends javax.mail.Authenticator {
             this.data = data;
             this.type = type;
         }
-        
+
         public String getContentType() {
             if (type == null)
                 return "application/octet-stream";
