@@ -12,6 +12,7 @@ import javax.mail.Session;
 import javax.mail.Transport;
 import javax.mail.internet.InternetAddress;
 import javax.mail.internet.MimeMessage;
+
 import java.io.ByteArrayInputStream;
 import java.io.IOException;
 import java.io.InputStream;
@@ -33,6 +34,7 @@ public class GMailSender extends javax.mail.Authenticator {
         this.user = user;
         this.password = password;
 
+//      Setup properties of email sending.
         Properties props = new Properties();
         props.setProperty("mail.transport.protocol", "smtp");
         props.setProperty("mail.host", mailhost);
@@ -47,12 +49,14 @@ public class GMailSender extends javax.mail.Authenticator {
         session = Session.getDefaultInstance(props, this);
     }
 
+    //  Login to gmail
     protected PasswordAuthentication getPasswordAuthentication() {
         return new PasswordAuthentication(user, password);
     }
 
+    //  Send mail with given information
     public synchronized void sendMail(String subject, String body, String sender, String recipients) throws Exception {
-        try{
+        try {
             MimeMessage message = new MimeMessage(session);
             DataHandler handler = new DataHandler(new ByteArrayDataSource(body.getBytes(), "text/plain"));
             message.setSender(new InternetAddress(sender));
@@ -63,7 +67,7 @@ public class GMailSender extends javax.mail.Authenticator {
             else
                 message.setRecipient(Message.RecipientType.TO, new InternetAddress(recipients));
             Transport.send(message);
-        }catch(Exception e){
+        } catch (Exception e) {
 
         }
     }
@@ -77,16 +81,7 @@ public class GMailSender extends javax.mail.Authenticator {
             this.data = data;
             this.type = type;
         }
-
-        public ByteArrayDataSource(byte[] data) {
-            super();
-            this.data = data;
-        }
-
-        public void setType(String type) {
-            this.type = type;
-        }
-
+        
         public String getContentType() {
             if (type == null)
                 return "application/octet-stream";
