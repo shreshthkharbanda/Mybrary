@@ -1285,7 +1285,7 @@ public class LogInFragment extends Fragment implements SearchView.OnCloseListene
                                 try {
                                     GMailSender sender = new GMailSender(mybraryEmail, mybraryPassword);
                                     sender.sendMail("Received Bug Report",
-                                            userEmail + " has found a bug. : \n" + explainBug.getText().toString() + ". \n\t",
+                                            libraryIdDatabase + " has found a bug. : \n" + explainBug.getText().toString() + ". \n\t",
                                             mybraryEmail,
                                             mybraryEmail);
                                 } catch (Exception e) {
