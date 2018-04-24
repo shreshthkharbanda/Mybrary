@@ -301,7 +301,7 @@ public class BookDatabaseFragment extends Fragment/* implements SearchView.OnQue
                 likes = c.getString(TAG_LIKES);
 
                 books = new HashMap<>();
-                books.put(TAG_BOOK_ID, id);
+                books.put(TAG_BOOK_ID, "Book ID: " + id);
                 books.put(TAG_TITLE, capitalLowercase(title));
                 books.put(TAG_AUTHOR_LAST, authorLast);
                 books.put(TAG_CATEGORY, category);

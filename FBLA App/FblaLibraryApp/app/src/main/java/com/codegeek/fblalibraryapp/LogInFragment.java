@@ -37,6 +37,7 @@ import android.view.ViewGroup;
 import android.widget.AdapterView;
 import android.widget.Button;
 import android.widget.CheckBox;
+import android.widget.CompoundButton;
 import android.widget.EditText;
 import android.widget.ListAdapter;
 import android.widget.ListView;
@@ -497,12 +498,14 @@ public class LogInFragment extends Fragment implements SearchView.OnCloseListene
                         } catch (Exception ignored) {
                         }
                     }
+                    
                 } else {
                     logInLayout.setVisibility(View.GONE);
                     accountLayout.setVisibility(View.GONE);
                     accountLayout.setVisibility(View.GONE);
                     signUpLayout.setVisibility(View.VISIBLE);
                 }
+
             }
         });
         alreadyMember.setOnClickListener(new View.OnClickListener()
@@ -696,6 +699,7 @@ public class LogInFragment extends Fragment implements SearchView.OnCloseListene
 
                 bookName = c.getString(TAG_BOOK_NAME);
                 bookId = c.getString(TAG_BOOK_ID);
+                Log.v("LOGIN;; Book ID", c.getString(TAG_BOOK_ID));
                 userName = c.getString(TAG_USER_FIRST);
                 lastName = c.getString(TAG_USER_LAST);
                 libraryIdDatabase = c.getString(TAG_LIBRARY_ID);
@@ -726,9 +730,8 @@ public class LogInFragment extends Fragment implements SearchView.OnCloseListene
                 Date currentTime = Calendar.getInstance().getTime();
 
                 persons.put(TAG_BOOK_NAME, bookName);
-                persons.put(TAG_BOOK_ID, bookId);
+                persons.put(TAG_BOOK_ID, "Book ID: " + bookId);
                 persons.put(TAG_USER_FIRST, userName + " " + lastName);
-//                persons.put(TAG_USER_LAST, lastName);
                 persons.put(TAG_LIBRARY_ID, libraryIdDatabase);
                 persons.put(TAG_OUT, dateOut);
                 persons.put(TAG_DUE, dateDue);
