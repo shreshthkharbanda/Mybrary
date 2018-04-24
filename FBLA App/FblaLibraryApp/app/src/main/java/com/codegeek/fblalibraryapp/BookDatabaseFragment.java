@@ -70,8 +70,9 @@ import static android.app.Activity.RESULT_OK;
 import static android.content.Context.MODE_PRIVATE;
 
 @SuppressWarnings("ConstantConditions")
-public class BookDatabaseFragment extends Fragment implements SearchView.OnQueryTextListener, SearchView.OnCloseListener {
+public class BookDatabaseFragment extends Fragment/* implements SearchView.OnQueryTextListener, SearchView.OnCloseListener*/ {
 
+    private Menu databaseMenu;
     String myJSON;
     public String TAG_RESULTS = "result";
     public String TAG_BOOK_ID = "bookId";
@@ -254,13 +255,11 @@ public class BookDatabaseFragment extends Fragment implements SearchView.OnQuery
             }
         });
         refreshList.setColorSchemeColors(
-                Color.RED,
-                Color.GREEN,
-                Color.CYAN,
-                Color.YELLOW,
-                Color.BLACK,
-                Color.MAGENTA
-        );
+                getResources().getColor(R.color.orange),
+                getResources().getColor(R.color.white),
+                getResources().getColor(R.color.green),
+                getResources().getColor(R.color.purple));
+
         listView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             @Override
             public void onItemClick(AdapterView<?> adapterView, View view, int i, long l) {
@@ -529,6 +528,9 @@ public class BookDatabaseFragment extends Fragment implements SearchView.OnQuery
     @Override
     public void onCreateOptionsMenu(Menu menu, MenuInflater inflater) {
         inflater.inflate(R.menu.general_menu, menu);
+//        databaseMenu = menu;
+//        sv = (SearchView) menu.findItem(R.id.item_search_database).getActionView();
+//        setupSearchView();
     }
 
     @RequiresApi(api = Build.VERSION_CODES.LOLLIPOP)
@@ -629,7 +631,7 @@ public class BookDatabaseFragment extends Fragment implements SearchView.OnQuery
         if (searchManager != null) {
             List<SearchableInfo> searchables = searchManager.getSearchablesInGlobalSearch();
 
-            // Try to use the "applications" global search provider
+            // Use the "applications" global search provider
             SearchableInfo info = searchManager.getSearchableInfo(getActivity().getComponentName());
             for (SearchableInfo inf : searchables) {
                 if (inf.getSuggestAuthority() != null
@@ -640,24 +642,34 @@ public class BookDatabaseFragment extends Fragment implements SearchView.OnQuery
             sv.setSearchableInfo(info);
         }
 
-        sv.setOnQueryTextListener(this);
-        sv.setOnCloseListener(this);
-    }
+        sv.setOnQueryTextListener(new SearchView.OnQueryTextListener() {
+            @Override
+            public boolean onQueryTextSubmit(String s) {
+                getActivity().runOnUiThread(new Runnable() {
+                    @Override
+                    public void run() {
+                        Toast.makeText(getContext(), "Submit Query", Toast.LENGTH_SHORT).show();
+                    }
+                });
 
-    public boolean onQueryTextChange(String newText) {
-        getAllSearchedBooks(newText);
-        return false;
-    }
+                getAllSearchedBooks(s);
+                return false;
+            }
 
-    public boolean onQueryTextSubmit(String query) {
-        getAllSearchedBooks(query);
-        return false;
-    }
+            @Override
+            public boolean onQueryTextChange(String s) {
 
-    public boolean onClose() {
-        return false;
+                getActivity().runOnUiThread(new Runnable() {
+                    @Override
+                    public void run() {
+                        Toast.makeText(getContext(), "Text Change J", Toast.LENGTH_SHORT).show();
+                    }
+                });
+                getAllSearchedBooks(s);
+                return false;
+            }
+        });
     }
-
 
     public void getAllSearchedBooks(final String queryWord) {
         @SuppressLint("StaticFieldLeak")
@@ -670,6 +682,7 @@ public class BookDatabaseFragment extends Fragment implements SearchView.OnQuery
                 String dataUrl = "http://ec2-52-41-161-91.us-west-2.compute.amazonaws.com/getSearchedBooks.php";
 
                 try {
+
                     HttpClient httpclient = new DefaultHttpClient();
                     httpPost = new HttpPost(dataUrl);
                     String json1;
@@ -725,7 +738,6 @@ public class BookDatabaseFragment extends Fragment implements SearchView.OnQuery
                         e.printStackTrace();
                     }
                 }
-
                 return result2;
             }
 
@@ -740,13 +752,14 @@ public class BookDatabaseFragment extends Fragment implements SearchView.OnQuery
 
     public void showAllSearchedBooks(String jsonData) {
         try {
-            JSONObject jsonObj = new JSONObject(myJSON);
+            JSONObject jsonObj = new JSONObject(jsonData);
             peoples = jsonObj.getJSONArray(TAG_RESULTS);
 
             for (int i = 0; i < peoples.length(); i++) {
                 JSONObject c = peoples.getJSONObject(i);
                 id = c.getString(TAG_BOOK_ID);
                 title = c.getString(TAG_TITLE);
+                Log.v("Title", title);
                 authorLast = c.getString(TAG_AUTHOR_LAST);
                 category = c.getString(TAG_CATEGORY);
                 callNumber = c.getString(TAG_CALL_NUMBER);
@@ -763,6 +776,7 @@ public class BookDatabaseFragment extends Fragment implements SearchView.OnQuery
                 bookList.add(books);
             }
         } catch (JSONException e1) {
+            Log.v("JSONException", e1.toString());
             e1.printStackTrace();
         }
         if (getActivity() != null) {
@@ -772,6 +786,8 @@ public class BookDatabaseFragment extends Fragment implements SearchView.OnQuery
                     new int[]{R.id.bookTitle, R.id.authorLastName, R.id.bookCategory, R.id.bookCallNumber, R.id.bookId, R.id.numberOfLikes}
             );
             listView.setAdapter(adapter);
+        } else {
+            Toast.makeText(getContext(), "Activity is null", Toast.LENGTH_SHORT).show();
         }
     }
 }

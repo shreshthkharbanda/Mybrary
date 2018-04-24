@@ -297,62 +297,47 @@ public class LogInFragment extends Fragment implements SearchView.OnCloseListene
 
         singleBookInfo = inflater.inflate(R.layout.activity_universal_book_info, container, false);
 
-
         signUp.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                if (libraryId.getText().toString().length() == 6 && (signUpPassword.getText().toString().equals(signUpPassword2.getText().toString()) && !(signUpFirst == null)
+
+                String regexStr = "^(?:(?:\\+?1\\s*(?:[.-]\\s*)?)?(?:\\(\\s*([2-9]1[02-9]|[2-9][02-8]1|[2-9][02-8][02-9])\\s*\\)|([2-9]1[02-9]|[2-9][02-8]1|[2-9][02-8][02-9]))\\s*(?:[.-]\\s*)?)?([2-9]1[02-9]|[2-9][02-9]1|[2-9][02-9]{2})\\s*(?:[.-]\\s*)?([0-9]{4})(?:\\s*(?:#|x\\.?|ext\\.?|extension)\\s*(\\d+))?$";
+
+                if (!(libraryId.getText().toString().length() == 6 && (signUpPassword.getText().toString().equals(signUpPassword2.getText().toString()) && !(signUpFirst == null)
                         && !(signUpLast == null) && !(signUpEmail == null) && !(signUpPassword == null)
                         && !(signUpPassword2 == null) && !(signUpPhone == null)) &&
                         (signUpPassword.getText().toString().equals(signUpPassword2.getText().toString())) &&
                         (Patterns.EMAIL_ADDRESS.matcher(signUpEmail.getText().toString()).matches()) &&
-                        (Patterns.PHONE.matcher(signUpPhone.getText().toString()).matches())) {
-                    if (result != null) {
-                        if (result.equalsIgnoreCase("Failed")) {
-                            Toast.makeText(getContext(), "That email already exists!", Toast.LENGTH_SHORT).show();
-                        } else if (result.equalsIgnoreCase("failure")) {
-                            Toast.makeText(getContext(), "That email already exists!", Toast.LENGTH_SHORT).show();
-                        } else {
-                            if (libraryId.getText().toString().equals("") && signUpPassword.getText().toString().equals("") && signUpPassword2.getText().toString().equals("") &&
-                                    signUpFirst.getText().toString().equals("") && signUpLast.getText().toString().equals("") && signUpEmail.getText().toString().equals("") &&
-                                    signUpPassword.getText().toString().equals("") && signUpPassword2.getText().toString().equals("") &&
-                                    signUpPhone.getText().toString().equals("")) {
-                                Toast.makeText(getContext(), "Please fill out all forms!", Toast.LENGTH_SHORT).show();
-                            }
-                            if (!(signUpPassword.getText().toString().equals(signUpPassword2.getText().toString()))) {
-                                Toast.makeText(getContext(), "Please make sure the passwords both match!", Toast.LENGTH_SHORT).show();
-                            }
-                            if (!(Patterns.EMAIL_ADDRESS.matcher(signUpEmail.getText().toString()).matches())) {
-                                Toast.makeText(getContext(), "Please make sure the email address is valid!", Toast.LENGTH_SHORT).show();
-                            }
-                            if (!(Patterns.PHONE.matcher(signUpPhone.getText().toString()).matches())) {
-                                Toast.makeText(getContext(), "Please make sure the phone number is valid!", Toast.LENGTH_SHORT).show();
-                            }
-                            if (!(libraryId.getText().toString().length() == 6)) {
-                                Toast.makeText(getContext(), "Please enter a valid library ID!", Toast.LENGTH_SHORT).show();
-                            } else {
-                                registerUser(libraryId.getText().toString(), signUpFirst.getText().toString(), signUpLast.getText().toString(),
-                                        signUpEmail.getText().toString(), signUpPassword.getText().toString(), signUpPhone.getText().toString(),
-                                        "http://ec2-52-41-161-91.us-west-2.compute.amazonaws.com/signUpLibrary.php");
-
-                                logInLayout.setVisibility(View.VISIBLE);
-                                accountLayout.setVisibility(View.GONE);
-                                logOutButton.setVisibility(View.GONE);
-                                signUpLayout.setVisibility(View.GONE);
-                                Toast.makeText(getContext(), "Account Successfully Created!", Toast.LENGTH_SHORT).show();
-                            }
+                        (Patterns.PHONE.matcher(signUpPhone.getText().toString()).matches()))) {
+                    try {
+                        if (result.equalsIgnoreCase("Failed") || result.equalsIgnoreCase("failure")) {
+                            Toast.makeText(getContext(), "That email already exists!", Toast.LENGTH_LONG).show();
                         }
-                    } else {
-                        Toast.makeText(getContext(), "Last else", Toast.LENGTH_SHORT).show();
-                        registerUser(libraryId.getText().toString(), signUpFirst.getText().toString(), signUpLast.getText().toString(),
-                                signUpEmail.getText().toString(), signUpPassword.getText().toString(), signUpPhone.getText().toString(),
-                                "http://ec2-52-41-161-91.us-west-2.compute.amazonaws.com/signUpLibrary.php");
+                    } catch (Exception ignored) {
+                        if (libraryId.getText().toString().equals("") && signUpPassword.getText().toString().equals("") && signUpPassword2.getText().toString().equals("") &&
+                                signUpFirst.getText().toString().equals("") && signUpLast.getText().toString().equals("") && signUpEmail.getText().toString().equals("") &&
+                                signUpPassword.getText().toString().equals("") && signUpPassword2.getText().toString().equals("") &&
+                                signUpPhone.getText().toString().equals("")) {
+                            Toast.makeText(getContext(), "Please fill out all forms!", Toast.LENGTH_LONG).show();
+                        } else if (!(signUpPassword.getText().toString().equals(signUpPassword2.getText().toString()))) {
+                            Toast.makeText(getContext(), "Please make sure both the passwords match!", Toast.LENGTH_LONG).show();
+                        } else if (!(Patterns.EMAIL_ADDRESS.matcher(signUpEmail.getText().toString()).matches())) {
+                            Toast.makeText(getContext(), "Please make sure the email address is valid!", Toast.LENGTH_LONG).show();
+                        } else if (!(android.util.Patterns.PHONE.matcher(signUpPhone.getText().toString()).matches())) {
+                            Toast.makeText(getContext(), "Please make sure the phone number is valid!", Toast.LENGTH_LONG).show();
+                        } else if (!(libraryId.getText().toString().length() == 6)) {
+                            Toast.makeText(getContext(), "Please enter a valid library ID!", Toast.LENGTH_LONG).show();
+                        } else {
+                            registerUser(libraryId.getText().toString(), signUpFirst.getText().toString(), signUpLast.getText().toString(),
+                                    signUpEmail.getText().toString(), signUpPassword.getText().toString(), signUpPhone.getText().toString(),
+                                    "http://ec2-52-41-161-91.us-west-2.compute.amazonaws.com/signUpLibrary.php");
 
-                        logInLayout.setVisibility(View.VISIBLE);
-                        accountLayout.setVisibility(View.GONE);
-                        logOutButton.setVisibility(View.GONE);
-                        signUpLayout.setVisibility(View.GONE);
-                        Toast.makeText(getContext(), "Account Successfully Created!", Toast.LENGTH_SHORT).show();
+                            logInLayout.setVisibility(View.VISIBLE);
+                            accountLayout.setVisibility(View.GONE);
+                            logOutButton.setVisibility(View.GONE);
+                            signUpLayout.setVisibility(View.GONE);
+                            Toast.makeText(getContext(), "Account Successfully Created!", Toast.LENGTH_LONG).show();
+                        }
                     }
                 }
             }
@@ -617,7 +602,7 @@ public class LogInFragment extends Fragment implements SearchView.OnCloseListene
                     getActivity().runOnUiThread(new Runnable() {
                         @Override
                         public void run() {
-                            Toast.makeText(getContext(), "Input-Output Exception", Toast.LENGTH_SHORT).show();
+                            Toast.makeText(getContext(), "Input-Output Exception", Toast.LENGTH_LONG).show();
                         }
                     });
                     logInCode = 0;
@@ -777,7 +762,7 @@ public class LogInFragment extends Fragment implements SearchView.OnCloseListene
                 dataUrl = new URL("http://ec2-52-41-161-91.us-west-2.compute.amazonaws.com/checkUsernamePassword.php");
             } catch (MalformedURLException e) {
                 e.printStackTrace();
-                Toast.makeText(getContext(), "Malformed URL Exception", Toast.LENGTH_SHORT).show();
+                Toast.makeText(getContext(), "Malformed URL Exception", Toast.LENGTH_LONG).show();
                 return "exception";
             }
             try {
@@ -802,7 +787,7 @@ public class LogInFragment extends Fragment implements SearchView.OnCloseListene
 
             } catch (IOException e1) {
                 e1.printStackTrace();
-                Toast.makeText(getContext(), "Input-Output Exception", Toast.LENGTH_SHORT).show();
+                Toast.makeText(getContext(), "Input-Output Exception", Toast.LENGTH_LONG).show();
                 return "exception";
             }
 
@@ -866,7 +851,7 @@ public class LogInFragment extends Fragment implements SearchView.OnCloseListene
                                     menuItem = accountMenu.findItem(R.id.changePassword);
                                     menuItem.setVisible(true);
                                 } catch (NullPointerException ignored) {
-//                                    Toast.makeText(getContext(), "NPE", Toast.LENGTH_SHORT).show();
+//                                    Toast.makeText(getContext(), "NPE", Toast.LENGTH_LONG).show();
                                 }
                                 setHasOptionsMenu(true);
 
@@ -885,7 +870,7 @@ public class LogInFragment extends Fragment implements SearchView.OnCloseListene
                                 validCredentials = false;
                                 loggedIn = false;
                             } else {
-                                Toast.makeText(getContext(), "Invalid credentials... Please try again", Toast.LENGTH_SHORT).show();
+                                Toast.makeText(getContext(), "Invalid credentials... Please try again", Toast.LENGTH_LONG).show();
                                 logInLayout.setVisibility(View.VISIBLE);
                                 accountLayout.setVisibility(View.GONE);
                                 validCredentials = false;
@@ -1144,7 +1129,7 @@ public class LogInFragment extends Fragment implements SearchView.OnCloseListene
             code = (json_data.getInt("code"));
 
             if (!(code == 1)) {
-                Toast.makeText(getContext(), "Please Try Again", Toast.LENGTH_SHORT).show();
+                Toast.makeText(getContext(), "Please Try Again", Toast.LENGTH_LONG).show();
             }
         } catch (Exception e) {
             Log.e("Fail 3", e.toString());
@@ -1168,7 +1153,7 @@ public class LogInFragment extends Fragment implements SearchView.OnCloseListene
                 dataUrl = new URL("http://ec2-52-41-161-91.us-west-2.compute.amazonaws.com/checkUsernamePassword.php");
             } catch (MalformedURLException e) {
                 e.printStackTrace();
-                Toast.makeText(getContext(), "Malformed URL Exception", Toast.LENGTH_SHORT).show();
+                Toast.makeText(getContext(), "Malformed URL Exception", Toast.LENGTH_LONG).show();
                 return "exception";
             }
             try {
@@ -1193,7 +1178,7 @@ public class LogInFragment extends Fragment implements SearchView.OnCloseListene
 
             } catch (IOException e1) {
                 e1.printStackTrace();
-                Toast.makeText(getContext(), "Input-Output Exception", Toast.LENGTH_SHORT).show();
+                Toast.makeText(getContext(), "Input-Output Exception", Toast.LENGTH_LONG).show();
                 return "exception";
             }
 
@@ -1300,7 +1285,7 @@ public class LogInFragment extends Fragment implements SearchView.OnCloseListene
                                 try {
                                     GMailSender sender = new GMailSender(mybraryEmail, mybraryPassword);
                                     sender.sendMail("Received Bug Report",
-                                            "A user has found a bug. : \n" + explainBug.getText().toString() + ". \n\t",
+                                            userEmail + " has found a bug. : \n" + explainBug.getText().toString() + ". \n\t",
                                             mybraryEmail,
                                             mybraryEmail);
                                 } catch (Exception e) {
@@ -1345,16 +1330,16 @@ public class LogInFragment extends Fragment implements SearchView.OnCloseListene
                                 if (newPasswordEdit.getText().toString().equals(confirmPasswordEdit.getText().toString()) && !(oldPasswordEdit.getText().toString().isEmpty()) &&
                                         !(newPasswordEdit.getText().toString().isEmpty()) && !(confirmPasswordEdit.getText().toString().isEmpty())) {
                                     updatePasswordCheck(mEmailView.getText().toString(), oldPasswordEdit.getText().toString());
-                                    Toast.makeText(getContext(), "Password changed.", Toast.LENGTH_SHORT).show();
+                                    Toast.makeText(getContext(), "Password changed.", Toast.LENGTH_LONG).show();
                                     Intent intent = new Intent(getActivity(), SwipeViewActivity.class);
                                     startActivity(intent);
                                     getActivity().finish();
                                 } else if (oldPasswordEdit.getText().toString().isEmpty() ||
                                         newPasswordEdit.getText().toString().isEmpty() || confirmPasswordEdit.getText().toString().isEmpty() ||
                                         !(Objects.equals(newPasswordEdit.getText().toString(), confirmPasswordEdit.getText().toString()))) {
-                                    Toast.makeText(getContext(), "Please make sure the new password and confirm password is the same.", Toast.LENGTH_SHORT).show();
+                                    Toast.makeText(getContext(), "Please make sure the new password and confirm password is the same.", Toast.LENGTH_LONG).show();
                                 } else {
-                                    Toast.makeText(getContext(), "Incorrect password. Please try again.", Toast.LENGTH_SHORT).show();
+                                    Toast.makeText(getContext(), "Incorrect password. Please try again.", Toast.LENGTH_LONG).show();
                                 }
                             }
                         });
@@ -1489,7 +1474,7 @@ public class LogInFragment extends Fragment implements SearchView.OnCloseListene
                     getActivity().runOnUiThread(new Runnable() {
                         @Override
                         public void run() {
-                            Toast.makeText(getContext(), "Input-Output Exception", Toast.LENGTH_SHORT).show();
+                            Toast.makeText(getContext(), "Input-Output Exception", Toast.LENGTH_LONG).show();
                         }
                     });
                     logInCode = 0;
