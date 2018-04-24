@@ -8,7 +8,8 @@ Author: Shreshth Kharbanda, North Creek High School, Bothell WA
 *****************************************************************************************
 
 ## Installation Instructions:
- - Download apk file on Android device from the location (https://github.com/smartyshre/Mybrary/blob/master/mybrary.apk)
+ - Download apk file on Android/FireOS device from the location (https://github.com/smartyshre/Mybrary/blob/master/mybrary.apk)
+ - Make sure Github is opened as the desktop version
  - Open the apk file from the device
  - This will install the Mybrary app on your device
  - Open the Mybrary App
