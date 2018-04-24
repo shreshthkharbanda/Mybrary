@@ -325,6 +325,8 @@ public class LogInFragment extends Fragment implements SearchView.OnCloseListene
                     registerUser(libraryId.getText().toString(), signUpFirst.getText().toString(), signUpLast.getText().toString(),
                             signUpEmail.getText().toString(), signUpPassword.getText().toString(), signUpPhone.getText().toString(),
                             "http://ec2-52-41-161-91.us-west-2.compute.amazonaws.com/signUpLibrary.php");
+                    Log.v("dataSignUp", libraryId.getText().toString() + " " + signUpFirst.getText().toString() + " " + signUpLast.getText().toString() + " " +
+                            signUpEmail.getText().toString() + " " + signUpPassword.getText().toString() + " " + signUpPhone.getText().toString());
 
                     logInLayout.setVisibility(View.VISIBLE);
                     accountLayout.setVisibility(View.GONE);
