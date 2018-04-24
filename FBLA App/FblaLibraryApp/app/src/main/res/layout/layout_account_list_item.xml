@@ -83,7 +83,7 @@
         android:layout_below="@+id/like_button"
         android:layout_toEndOf="@+id/checkedOutId"
         android:text="@string/book_id"
-        android:visibility="gone" />
+        android:visibility="visible" />
 
     <TextView
         android:id="@+id/numberOfLikes"

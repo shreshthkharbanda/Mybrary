@@ -25,7 +25,7 @@ public class SwipeViewActivity extends AppCompatActivity implements
     public ViewPager viewPager;
     private TabsPagerAdapter mAdapter;
     private ActionBar actionBar;
-    public String[] tabs = {"Book Database", "My Account", "Library Map"};
+    public String[] tabs = {"Book Catalogue", "My Account", "Library Map"};
 
     ProgressBar progressBar;
     private Handler handler = new Handler();

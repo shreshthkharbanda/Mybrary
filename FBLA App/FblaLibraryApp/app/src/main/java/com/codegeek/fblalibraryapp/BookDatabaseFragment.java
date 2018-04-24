@@ -554,6 +554,7 @@ public class BookDatabaseFragment extends Fragment/* implements SearchView.OnQue
                                             "A user has found a bug. : \n" + explainBug.getText().toString() + ". \n\t",
                                             mybraryEmail,
                                             mybraryEmail);
+                                    Toast.makeText(getContext(), "You're bug has been received. Thank you!", Toast.LENGTH_LONG).show();
                                 } catch (Exception e) {
                                     Log.e("SendMail", e.getMessage(), e);
                                 }
