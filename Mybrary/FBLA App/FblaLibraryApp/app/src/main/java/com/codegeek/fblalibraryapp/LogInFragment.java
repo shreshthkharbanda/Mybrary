@@ -1572,7 +1572,6 @@ public class LogInFragment extends Fragment implements SearchView.OnCloseListene
                 persons.put(TAG_BOOK_NAME, bookName);
                 persons.put(TAG_BOOK_ID, bookId);
                 persons.put(TAG_USER_FIRST, userName + " " + lastName);
-//                persons.put(TAG_USER_LAST, lastName);
                 persons.put(TAG_LIBRARY_ID, libraryIdDatabase);
                 persons.put(TAG_OUT, dateOut);
                 persons.put(TAG_DUE, dateDue);
