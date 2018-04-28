@@ -1,14 +1,18 @@
 package com.codegeek.fblalibraryapp;
 
-/**
- * Created by shreshthkharbanda for FblaLibraryApp.
- */
-
 import java.security.AccessController;
 import java.security.Provider;
 
+/**
+ * This class is a default provider for sending emails.
+ *
+ * @Shreshth Kharbanda
+ */
 public final class JSSEProvider extends Provider {
 
+    /**
+     * This method is a default provider for sending emails.
+     */
     public JSSEProvider() {
         super("HarmonyJSSE", 1.0, "Harmony JSSE Provider");
         AccessController.doPrivileged(new java.security.PrivilegedAction<Void>() {

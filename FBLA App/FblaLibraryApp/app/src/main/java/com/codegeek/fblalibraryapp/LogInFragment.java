@@ -105,6 +105,7 @@ import static android.provider.ContactsContract.Directory.PACKAGE_NAME;
 @SuppressLint("StaticFieldLeak")
 public class LogInFragment extends Fragment implements SearchView.OnCloseListener, SearchView.OnQueryTextListener {
 
+    //  Defining and declaring variables
     private Menu accountMenu;
     static TextInputEditText mEmailView;
     TextInputEditText mPasswordView;
@@ -245,8 +246,7 @@ public class LogInFragment extends Fragment implements SearchView.OnCloseListene
     public View onCreateView(final LayoutInflater inflater, final ViewGroup container,
                              Bundle savedInstanceState) {
 
-//        setHasOptionsMenu(true);
-
+//      Initializing variables and assigning variables to the UI components
         logInView = inflater.inflate(R.layout.fragment_log_in, container, false);
         mEmailView = logInView.findViewById(R.id.logInEmailEdit);
         mPasswordView = logInView.findViewById(R.id.logInPasswordEdit);
@@ -300,22 +300,20 @@ public class LogInFragment extends Fragment implements SearchView.OnCloseListene
         checkedOut = listItemView.findViewById(R.id.checkedOutId);
         bookIdText = listItemView.findViewById(R.id.bookIdAccount);
         bookTitleText = listItemView.findViewById(R.id.bookName);
-//        authorLastText = listItemView.findViewById(R.id.authorLastName);
-//        bookCategoryText = listItemView.findViewById(R.id.bookCategory);
         bookCallNumberText = listItemView.findViewById(R.id.bookCallNumber);
         bookLikesText = listItemView.findViewById(R.id.numberOfLikes);
-//        bookDescriptionText = listItemView.findViewById(R.id.bookDescription);
         dateOutText = listItemView.findViewById(R.id.outDate);
         dateDueText = listItemView.findViewById(R.id.dueDate);
         loggedInUserText = listItemView.findViewById(R.id.userName);
 
         singleBookInfo = inflater.inflate(R.layout.activity_universal_book_info, container, false);
 
+
         signUp.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
 
-                String regexStr = "^(?:(?:\\+?1\\s*(?:[.-]\\s*)?)?(?:\\(\\s*([2-9]1[02-9]|[2-9][02-8]1|[2-9][02-8][02-9])\\s*\\)|([2-9]1[02-9]|[2-9][02-8]1|[2-9][02-8][02-9]))\\s*(?:[.-]\\s*)?)?([2-9]1[02-9]|[2-9][02-9]1|[2-9][02-9]{2})\\s*(?:[.-]\\s*)?([0-9]{4})(?:\\s*(?:#|x\\.?|ext\\.?|extension)\\s*(\\d+))?$";
+//              Validating sign up information entered and if it is all valid, register the user into the database.
 
                 if (libraryId.getText().toString().length() == 6 && (signUpPassword.getText().toString().equals(signUpPassword2.getText().toString()) && !(signUpFirst == null)
                         && !(signUpLast == null) && !(signUpEmail == null) && !(signUpPassword == null)
@@ -353,39 +351,15 @@ public class LogInFragment extends Fragment implements SearchView.OnCloseListene
                             Toast.makeText(getContext(), "Please make sure the phone number is valid!", Toast.LENGTH_LONG).show();
                         } else if (!(libraryId.getText().toString().length() == 6)) {
                             Toast.makeText(getContext(), "Please enter a valid library ID!", Toast.LENGTH_LONG).show();
-                        }/* else {
-                            registerUser(libraryId.getText().toString(), signUpFirst.getText().toString(), signUpLast.getText().toString(),
-                                    signUpEmail.getText().toString(), signUpPassword.getText().toString(), signUpPhone.getText().toString(),
-                                    "http://ec2-52-41-161-91.us-west-2.compute.amazonaws.com/signUpLibrary.php");
-
-                            logInLayout.setVisibility(View.VISIBLE);
-                            accountLayout.setVisibility(View.GONE);
-                            logOutButton.setVisibility(View.GONE);
-                            signUpLayout.setVisibility(View.GONE);
-                            Toast.makeText(getContext(), "Account Successfully Created!", Toast.LENGTH_LONG).show();
                         }
-
-                    }
-                } else{
-                    registerUser(libraryId.getText().toString(), signUpFirst.getText().toString(), signUpLast.getText().toString(),
-                            signUpEmail.getText().toString(), signUpPassword.getText().toString(), signUpPhone.getText().toString(),
-                            "http://ec2-52-41-161-91.us-west-2.compute.amazonaws.com/signUpLibrary.php");
-
-                    logInLayout.setVisibility(View.VISIBLE);
-                    accountLayout.setVisibility(View.GONE);
-                    logOutButton.setVisibility(View.GONE);
-                    signUpLayout.setVisibility(View.GONE);
-                    Toast.makeText(getContext(), "Account Successfully Created!", Toast.LENGTH_LONG).show();
-                    */
                     }
 
                 }
             }
         });
 
-        createAccount.setOnClickListener(new View.OnClickListener()
-
-        {
+//      Change screen to sign up screen when user clicks the text "No Account Yet? Create One"
+        createAccount.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
                 logInLayout.setVisibility(View.GONE);
@@ -393,10 +367,9 @@ public class LogInFragment extends Fragment implements SearchView.OnCloseListene
                 signUpLayout.setVisibility(View.VISIBLE);
             }
         });
-        refreshListAccount.setOnRefreshListener(new SwipeRefreshLayout.OnRefreshListener()
 
-        {
-
+//      Detects user's action of pulling to refresh the list
+        refreshListAccount.setOnRefreshListener(new SwipeRefreshLayout.OnRefreshListener() {
             @Override
             public void onRefresh() {
                 new Handler().postDelayed(new Runnable() {
@@ -426,9 +399,8 @@ public class LogInFragment extends Fragment implements SearchView.OnCloseListene
         StrictMode.ThreadPolicy policy = new StrictMode.ThreadPolicy.Builder().permitAll().build();
         StrictMode.setThreadPolicy(policy);
 
-        logOutButton.setOnClickListener(new View.OnClickListener()
-
-        {
+//      Log user out when user clicks the log out button
+        logOutButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
                 logOut();
@@ -442,63 +414,79 @@ public class LogInFragment extends Fragment implements SearchView.OnCloseListene
                 logInCode = 0;
             }
         });
-        logInButton.setOnClickListener(new View.OnClickListener()
 
-        {
+//      Detect save username checkbox's boolean of checked changed
+        saveUsername.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
+            @Override
+            public void onCheckedChanged(CompoundButton compoundButton, boolean b) {
+//              If checkbox is checked, save username to to cache
+                if (b) {
+                    usernamePreferences = getActivity().getSharedPreferences("Username", MODE_PRIVATE);
+                    usernameEditor = usernamePreferences.edit();
+                    usernameEditor.putString("username", mEmailView.getText().toString());
+                    usernameEditor.apply();
+                } else {
+                    usernameEditor.clear().apply();
+                }
+            }
+        });
+
+//      Detect save password checkbox's boolean of checked changed
+        savePassword.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
+            @Override
+            public void onCheckedChanged(CompoundButton compoundButton, boolean b) {
+//              If checkbox is checked, save password to to cache
+                if (b) {
+                    passwordPreferences = getContext().getSharedPreferences("Password", MODE_PRIVATE);
+                    passwordEditor = passwordPreferences.edit();
+                    passwordEditor.putString("password", mPasswordView.getText().toString());
+                    passwordEditor.apply();
+                } else {
+                    passwordEditor.clear().apply();
+                }
+            }
+        });
+//      Detect stay logged in checkbox's boolean of checked changed
+        stayLoggedIn.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
+            @Override
+            public void onCheckedChanged(CompoundButton compoundButton, boolean b) {
+//              If checkbox is checked, save both username and password to cache and add value to make sure that the user is logged in as soon as the app opens up
+                if (b) {
+                    loggedInPrefs = getContext().getSharedPreferences("StayLoggedIn", MODE_PRIVATE);
+                    loggedInEditor = loggedInPrefs.edit();
+                    loggedInEditor.putString("stayLoggedIn", "yes");
+                    loggedInEditor.apply();
+
+                    passwordPreferences = getContext().getSharedPreferences("Password", MODE_PRIVATE);
+                    passwordEditor = passwordPreferences.edit();
+                    passwordEditor.putString("password", mPasswordView.getText().toString());
+                    passwordEditor.apply();
+
+                    usernamePreferences = getActivity().getSharedPreferences("Username", MODE_PRIVATE);
+                    usernameEditor = usernamePreferences.edit();
+                    usernameEditor.putString("username", mEmailView.getText().toString());
+                    usernameEditor.apply();
+                } else {
+                    passwordEditor.clear().apply();
+                    usernameEditor.clear().apply();
+                    loggedInEditor.putString("stayLoggedIn", "no");
+                }
+            }
+        });
+
+//      Detects button click on the log in button
+        logInButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-
+//              If email and password is not empty then check credentials or else open sign up screen
                 userEmail = mEmailView.getText().toString();
                 userPass = mPasswordView.getText().toString();
 
                 if (!Objects.equals(mEmailView.getText().toString(), "") && !Objects.equals(mPasswordView.getText().toString(), "")) {
-
                     pdLoading.setMessage("\tLoading...");
                     pdLoading.setCancelable(false);
                     pdLoading.show();
                     checkCredentials(mEmailView.getText().toString(), mPasswordView.getText().toString());
-
-                    if (saveUsername.isChecked()) {
-                        usernamePreferences = getActivity().getSharedPreferences("Username", MODE_PRIVATE);
-                        usernameEditor = usernamePreferences.edit();
-                        usernameEditor.putString("username", mEmailView.getText().toString());
-                        usernameEditor.apply();
-                    } else if (!saveUsername.isChecked() && usernameEditor != null) {
-                        usernameEditor.clear().apply();
-                    }
-                    if (savePassword.isChecked()) {
-                        passwordPreferences = getContext().getSharedPreferences("Password", MODE_PRIVATE);
-                        passwordEditor = passwordPreferences.edit();
-                        passwordEditor.putString("password", mPasswordView.getText().toString());
-                        passwordEditor.apply();
-                    } else if (!savePassword.isChecked() && passwordEditor != null) {
-                        passwordEditor.clear().apply();
-                    }
-                    if (stayLoggedIn.isChecked()) {
-                        loggedInPrefs = getContext().getSharedPreferences("StayLoggedIn", MODE_PRIVATE);
-                        loggedInEditor = loggedInPrefs.edit();
-                        loggedInEditor.putString("stayLoggedIn", "yes");
-                        loggedInEditor.apply();
-
-                        passwordPreferences = getContext().getSharedPreferences("Password", MODE_PRIVATE);
-                        passwordEditor = passwordPreferences.edit();
-                        passwordEditor.putString("password", mPasswordView.getText().toString());
-                        passwordEditor.apply();
-
-                        usernamePreferences = getActivity().getSharedPreferences("Username", MODE_PRIVATE);
-                        usernameEditor = usernamePreferences.edit();
-                        usernameEditor.putString("username", mEmailView.getText().toString());
-                        usernameEditor.apply();
-
-                    } else if (!stayLoggedIn.isChecked()) {
-                        try {
-                            passwordEditor.clear().apply();
-                            usernameEditor.clear().apply();
-                            loggedInEditor.putString("stayLoggedIn", "no");
-                        } catch (Exception ignored) {
-                        }
-                    }
-                    
                 } else {
                     logInLayout.setVisibility(View.GONE);
                     accountLayout.setVisibility(View.GONE);
@@ -508,21 +496,23 @@ public class LogInFragment extends Fragment implements SearchView.OnCloseListene
 
             }
         });
-        alreadyMember.setOnClickListener(new View.OnClickListener()
 
-        {
+//      Detects click on the text that says "Already a member? Login"
+        alreadyMember.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
+//              Makes the login screen visible and the other screens invisible and gone
                 logInLayout.setVisibility(View.VISIBLE);
                 signUpLayout.setVisibility(View.GONE);
                 accountLayout.setVisibility(View.GONE);
             }
         });
-        forgotPassword.setOnClickListener(new View.OnClickListener()
 
-        {
+//      Detects click on the text that says "Forgot Password?"
+        forgotPassword.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
+
                 // create dialog to checkout book
                 final AlertDialog.Builder dialogBuilder = new AlertDialog.Builder(getContext());
                 LayoutInflater inflater = getActivity().getLayoutInflater();
@@ -540,6 +530,8 @@ public class LogInFragment extends Fragment implements SearchView.OnCloseListene
                     public void onClick(DialogInterface dialog, int whichButton) {
                         forgotPasswordEmail = forgotPasswordEdit.getText().toString();
 
+//                      generate random password in between 3 characters and 10 characters with the characters given in charsForPass
+//                      There are extra dashes for an equal probability
                         String charsForPass = "12345678901234567890------------abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ";
                         newPassword = new StringBuilder();
                         Random random = new Random();
@@ -549,36 +541,41 @@ public class LogInFragment extends Fragment implements SearchView.OnCloseListene
                             newPassword.append(singleChar);
                         }
 
+//                      Sends E-mail using the GMailSender Class and the JSSEProvider Class
                         try {
                             GMailSender sender = new GMailSender(mybraryEmail, mybraryPassword);
                             sender.sendMail("Mybrary -- Reset Password",
-                                    "Your new password is: \n" + newPassword + ". \n\t" +
+                                    "Your new password is: \n\"" + newPassword + "\". \n\t" +
                                             "To change your password, please log into your account on our app and then click the change password which appears after clicking the 3 dots in the menu bar of our app. Please reply to this email for any questions.",
                                     mybraryEmail,
                                     forgotPasswordEmail);
                         } catch (Exception e) {
                             Log.e("SendMail", e.getMessage(), e);
                         }
+//                      Updates the password in the database with the right email and the random password
                         updatePassword(forgotPasswordEmail, newPassword.toString());
                         Toast.makeText(getContext(), "An email has been sent to you with your new password. Please check your e-mail.", Toast.LENGTH_LONG).show();
                     }
                 });
-                // cancel resetting password
+                // Cancel resetting password
                 dialogBuilder.setNegativeButton("Cancel", new DialogInterface.OnClickListener() {
                     public void onClick(DialogInterface forgotPasswordDialog, int whichButton) {
+//                      Cancels the dialogbox and closes it
                         forgotPasswordDialog.cancel();
                     }
                 })
+//                      Sets properties for the dialogbox
                         .setIcon(R.drawable.mybrary_logo)
                         .setCancelable(false)
                         .show();
             }
         });
-        listAccount.setOnItemClickListener(new AdapterView.OnItemClickListener()
 
-        {
+//      Detects click on any item in the my account list of books checked out
+        listAccount.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             @Override
             public void onItemClick(AdapterView<?> adapterView, View view, int i, long l) {
+//              Gets details of the book from the json encoded data
                 String item = listAccount.getItemAtPosition(i).toString().replace("{", "").replace("}", "");
                 Log.v("Login", item);
                 String[] bookDetailsArray = item.split(",");
@@ -587,7 +584,7 @@ public class LogInFragment extends Fragment implements SearchView.OnCloseListene
                 String title = bookDetailsArray[6];
                 String likes = bookDetailsArray[8];
 
-
+//              Uses the default, built-in intent for sharing with social media
                 Intent sendIntent = new Intent();
                 sendIntent.setAction(Intent.ACTION_SEND);
                 sendIntent.putExtra(Intent.EXTRA_TEXT, "Checkout \"" + title + "\" on Mybrary! I checked this book out and would definitely recommend this great book! It has " + likes + " likes! I should return the book by " + dateDue + " if you would like to check it out.");
@@ -595,20 +592,30 @@ public class LogInFragment extends Fragment implements SearchView.OnCloseListene
                 startActivity(sendIntent);
             }
         });
-
         return logInView;
     }
 
+    /*
+    * This method is used to retreive the books that are checked out from the MySQL database and is done through a php code hosted on AWS
+    * and this helps make it secure since only our IP addresses can access the php code and the website.
+    * Author: Shreshth Kharbanda
+    */
     public void getBooksOut() {
+//      Suppress StaticFieldLeaks
         @SuppressLint("StaticFieldLeak")
+
+//      AsyncTask Class of Type String, Void, String
+
         class GetDataJSON extends AsyncTask<String, Void, String> {
             @Override
             protected String doInBackground(String... params) {
 
+//              Defining local variables and initializing the url of the php code
                 InputStream inputStream;
                 String result;
                 String dataUrl = "http://ec2-52-41-161-91.us-west-2.compute.amazonaws.com/booksCheckedOut.php";
 
+//              Uses HttpPost to send the email over to the php code as an input to get the books checked out
                 try {
                     HttpClient httpclient = new DefaultHttpClient();
                     httpPost = new HttpPost(dataUrl);
@@ -623,17 +630,22 @@ public class LogInFragment extends Fragment implements SearchView.OnCloseListene
                     httpPost.setHeader("Accept", "application/json");
                     httpPost.setHeader("Content-type", "application/json");
 
+//                  Retrieves the result and what is returned from the php code and stores the string in MyJSON
                     HttpResponse httpResponse = httpclient.execute(httpPost);
                     inputStream = httpResponse.getEntity().getContent();
                     result = convertInputStreamToString(inputStream);
                     myJSON = result;
                 } catch (Exception e) {
+//                  Exception and logged in debug portion of logcat
                     Log.d("InputStream", e.getLocalizedMessage());
                 }
+//              Set header for the HttpPost process
                 httpPost.setHeader("Content-type", "application/json");
 
                 inputStream = null;
                 String result2 = null;
+
+//              Retrieves the data from the php code to get all the information about the books checked out by the user
                 try {
                     HttpResponse httpResponse = httpClient.execute(httpPost);
                     HttpEntity entity = httpResponse.getEntity();
@@ -672,6 +684,7 @@ public class LogInFragment extends Fragment implements SearchView.OnCloseListene
                 return result2;
             }
 
+            //          Calls the method showBooksCheckedOut and gives an input of the JSON data
             @Override
             protected void onPostExecute(String result) {
                 showBooksCheckedOut(myJSON);
@@ -681,12 +694,17 @@ public class LogInFragment extends Fragment implements SearchView.OnCloseListene
         g.execute();
     }
 
-
+    /**
+     * This method shows the data gotten and populates the listview with the data
+     *
+     * @param jsonData
+     * @return
+     */
     public void showBooksCheckedOut(String jsonData) {
         user = userEmail;
         inputStream = null;
         result = "";
-        dataUrl = "http://ec2-52-41-161-91.us-west-2.compute.amazonaws.com/booksCheckedOut.php";
+//        dataUrl = "http://ec2-52-41-161-91.us-west-2.compute.amazonaws.com/booksCheckedOut.php";
 
         try {
             JSONObject jsonObj = new JSONObject(jsonData);
@@ -694,12 +712,12 @@ public class LogInFragment extends Fragment implements SearchView.OnCloseListene
             booksArray = jsonObj.getJSONArray(TAG_RESULTS);
             booksList = new ArrayList<>();
 
+//          for loop to get the string values from the json object
             for (int i = 0; i < booksArray.length(); i++) {
                 JSONObject c = booksArray.getJSONObject(i);
 
                 bookName = c.getString(TAG_BOOK_NAME);
                 bookId = c.getString(TAG_BOOK_ID);
-                Log.v("LOGIN;; Book ID", c.getString(TAG_BOOK_ID));
                 userName = c.getString(TAG_USER_FIRST);
                 lastName = c.getString(TAG_USER_LAST);
                 libraryIdDatabase = c.getString(TAG_LIBRARY_ID);
@@ -723,7 +741,6 @@ public class LogInFragment extends Fragment implements SearchView.OnCloseListene
                     userFineText.setTextSize(25);
                 }
 
-
                 final HashMap<String, String> persons = new HashMap<>();
 
                 @SuppressLint("SimpleDateFormat") SimpleDateFormat sdf = new SimpleDateFormat("yyyyMMdd");
@@ -742,11 +759,13 @@ public class LogInFragment extends Fragment implements SearchView.OnCloseListene
 
                 booksList.add(persons);
             }
+//          Use Custom Log In Adapter to setup the variable logInAdapter
             logInAdapter = new CustomLogInAdapter(getContext(), booksList, R.layout.layout_account_list_item,
                     new String[]{TAG_BOOK_NAME, TAG_USER_FIRST, TAG_OUT, TAG_DUE, TAG_CHECKED_OUT_ID, TAG_BOOK_ID, TAG_LIKES, TAG_BOOLEAN_LIKED},
                     new int[]{R.id.bookName, R.id.userName, R.id.outDate, R.id.dueDate, R.id.checkedOutId, R.id.bookId, R.id.numberOfLikes, R.id.booleanLiked}
             );
 
+//          Set Adapter for books checked out list
             try {
                 listAccount.setAdapter(logInAdapter);
             } catch (NullPointerException npe) {
@@ -758,6 +777,12 @@ public class LogInFragment extends Fragment implements SearchView.OnCloseListene
         }
     }
 
+    /**
+     * Converts input stream to retrieve data from any kind of stream, in our case, a webpage
+     *
+     * @param inputStream
+     * @return the input stream type value as a string
+     */
     public String convertInputStreamToString(InputStream inputStream) throws IOException {
         BufferedReader bufferedReader = new BufferedReader(new InputStreamReader(inputStream));
         String line;
@@ -769,22 +794,46 @@ public class LogInFragment extends Fragment implements SearchView.OnCloseListene
         return result3.toString();
     }
 
+
+    /**
+     * Used to encapsulate the user email
+     *
+     * @return the email of the user
+     */
     public static String sendUserEmail() {
         return mEmailView.getText().toString();
     }
 
+    /**
+     * Used to encapsulate the user email
+     *
+     * @return the library id of the user
+     */
     public static String sendLibraryId() {
         return libraryIdDatabase;
     }
 
+    /**
+     * Used to encapsulate the user email
+     *
+     * @return if the user is logged in or not as a boolean
+     */
     public static Boolean sendLoggedIn() {
         return loggedIn;
     }
 
+    /**
+     * Used to encapsulate the user email
+     *
+     * @return the name of the user
+     */
     public static String sendUserName() {
         return userName;
     }
 
+    /**
+     * This method logs out the user from his/her account
+     */
     public void logOut() {
         accountLayout.setVisibility(View.GONE);
         logInLayout.setVisibility(View.VISIBLE);
@@ -801,10 +850,20 @@ public class LogInFragment extends Fragment implements SearchView.OnCloseListene
         fragTransaction.commit();
     }
 
+    /**
+     * This method checks the credentials of the user that is attempting to log in
+     *
+     * @param email
+     * @param password
+     */
     public void checkCredentials(String email, String password) {
         new Login().execute(email, password);
     }
 
+
+    /**
+     * This class is used in the checkCredentials method for LogIn and uses AsyncTask of type String, String, String
+     */
     @SuppressLint("StaticFieldLeak")
     private class Login extends AsyncTask<String, String, String> {
         HttpURLConnection conn;
@@ -813,7 +872,6 @@ public class LogInFragment extends Fragment implements SearchView.OnCloseListene
         @Override
         protected String doInBackground(String... params) {
             try {
-
                 dataUrl = new URL("http://ec2-52-41-161-91.us-west-2.compute.amazonaws.com/checkUsernamePassword.php");
             } catch (MalformedURLException e) {
                 e.printStackTrace();
@@ -870,10 +928,14 @@ public class LogInFragment extends Fragment implements SearchView.OnCloseListene
                 conn.disconnect();
             }
         }
+//      After doInBackground, this executes and updates the user interface layer with the result
 
+        /**
+         * After doInBackground, this method is executed and updates the user interface layer with the result
+         * @param insideResult
+         */
         @Override
         protected void onPostExecute(final String insideResult) {
-
             getActivity().runOnUiThread(new Runnable() {
                 @Override
                 public void run() {
@@ -896,7 +958,7 @@ public class LogInFragment extends Fragment implements SearchView.OnCloseListene
                                 validCredentials = true;
                                 loggedIn = true;
                                 getBooksOut();
-                                SharedPreferences pref = getContext().getSharedPreferences("myPrefs", 0); // 0 - for private mode
+                                SharedPreferences pref = getContext().getSharedPreferences("myPrefs", 0); // 0 represents that this data is private and only the app can access this shared preference data
                                 String tokenPrefString = pref.getString("tokenKey", null);
                                 String registrationIdPref = pref.getString("registrationKey", null);
                                 insertToken(tokenPrefString, registrationIdPref, "http://ec2-52-41-161-91.us-west-2.compute.amazonaws.com/insertToken.php");
@@ -906,7 +968,7 @@ public class LogInFragment extends Fragment implements SearchView.OnCloseListene
                                     menuItem = accountMenu.findItem(R.id.changePassword);
                                     menuItem.setVisible(true);
                                 } catch (NullPointerException ignored) {
-//                                    Toast.makeText(getContext(), "NPE", Toast.LENGTH_LONG).show();
+                                    Log.d("No Change Password Item", "The change password icon in the action bar does not exist. Please restart the app and try again");
                                 }
                                 setHasOptionsMenu(true);
 
@@ -938,6 +1000,10 @@ public class LogInFragment extends Fragment implements SearchView.OnCloseListene
         }
     }
 
+
+    /**
+     * This method is executed when the android OS tells the app that it has been started. In this method, the app retrieves the cached data about the saved
+     */
     @Override
     public void onStart() {
         super.onStart();

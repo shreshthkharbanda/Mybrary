@@ -18,6 +18,11 @@ import android.widget.RelativeLayout;
 import java.util.ArrayList;
 import java.util.Random;
 
+/**
+ * This class sets up the tabs and the view pager for the app.
+ *
+ * @Shreshth Kharbanda
+ */
 @SuppressWarnings("deprecation")
 public class SwipeViewActivity extends AppCompatActivity implements
         ActionBar.TabListener {
@@ -33,6 +38,12 @@ public class SwipeViewActivity extends AppCompatActivity implements
     ImageView splashLogo;
     int progressStatus = 0;
 
+    /**
+     * This method is called on the creation of this class and sets up the
+     * view pager, action bar, progress bar, and splash logo.
+     *
+     * @param (savedInstanceState)
+     */
     @RequiresApi(api = Build.VERSION_CODES.LOLLIPOP)
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -62,6 +73,9 @@ public class SwipeViewActivity extends AppCompatActivity implements
         opened = true;
     }
 
+    /**
+     * displays the spashscreen when the application is first opened
+     */
     @Override
     protected void onStart() {
         super.onStart();
@@ -69,6 +83,9 @@ public class SwipeViewActivity extends AppCompatActivity implements
         opened = true;
     }
 
+    /**
+     * displays the splashscreen when the application
+     */
     public void splashScreen() {
         while (progressBar.getProgress() < 100) {
             progressBar.setProgress(progressBar.getProgress() + new Random().nextInt(4) + 1);
@@ -136,6 +153,9 @@ public class SwipeViewActivity extends AppCompatActivity implements
         }).start();
     }
 
+    /**
+     * sets up the tabs for the app
+     */
     public void setUpTabs() {
         for (String tab_name : tabs) {
             actionBar.addTab(actionBar.newTab().setText(tab_name)
@@ -159,6 +179,12 @@ public class SwipeViewActivity extends AppCompatActivity implements
         });
     }
 
+    /**
+     * sets the current tab for the app on the view pager.
+     *
+     * @param tab
+     * @param ft
+     */
     @Override
     public void onTabSelected(ActionBar.Tab tab, android.support.v4.app.FragmentTransaction ft) {
         viewPager.setCurrentItem(tab.getPosition());

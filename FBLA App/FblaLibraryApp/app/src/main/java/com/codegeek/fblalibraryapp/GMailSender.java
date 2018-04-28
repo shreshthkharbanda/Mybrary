@@ -1,9 +1,5 @@
 package com.codegeek.fblalibraryapp;
 
-/**
- * Created by shreshthkharbanda for FblaLibraryApp.
- */
-
 import javax.activation.DataHandler;
 import javax.activation.DataSource;
 import javax.mail.Message;
@@ -20,6 +16,11 @@ import java.io.OutputStream;
 import java.security.Security;
 import java.util.Properties;
 
+/**
+ * This class sends emails from the recipient to the appropriate recipient.
+ *
+ * @Shreshth Kharbanda
+ */
 public class GMailSender extends javax.mail.Authenticator {
 
 //  Define variables
@@ -33,6 +34,14 @@ public class GMailSender extends javax.mail.Authenticator {
         Security.addProvider(new JSSEProvider());
     }
 
+    /**
+     * This method creates and returns a GMailSender object with the given
+     * email and password
+     *
+     * @param (user) the user's email
+     * @param (password) the user's email password
+     * @return a GMailSender object with the given user and password
+     */
     public GMailSender(String user, String password) {
         this.user = user;
         this.password = password;
@@ -52,7 +61,10 @@ public class GMailSender extends javax.mail.Authenticator {
         session = Session.getDefaultInstance(props, this);
     }
 
-    //  Login to gmail
+    /**
+     * This method authenticates the user's email and password.
+     * @return the PasswordAuthentication with the email and password
+     */
     protected PasswordAuthentication getPasswordAuthentication() {
         return new PasswordAuthentication(user, password);
     }
@@ -75,6 +87,12 @@ public class GMailSender extends javax.mail.Authenticator {
         }
     }
 
+    /**
+     * This class is used to send an email for reporting bugs and resetting the
+     * user's password.
+     *
+     * @Shreshth Kharbanda
+     */
     public class ByteArrayDataSource implements DataSource {
         private byte[] data;
         private String type;

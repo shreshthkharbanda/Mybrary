@@ -62,7 +62,6 @@
         android:visibility="visible"
         android:textStyle="bold"/>
 
-
     <TextView
         android:id="@+id/numberOfLikes"
         android:layout_width="wrap_content"

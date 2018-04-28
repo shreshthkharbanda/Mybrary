@@ -35,13 +35,19 @@ import java.util.ArrayList;
 import java.util.List;
 
 /**
- * Created by shreshthkharbanda for FblaLibraryApp.
+ * This class sends the user notifications when they have an overdue book.
+ *
+ * @Shreshth Kharbanda
  */
-
 public class FirebaseNotifications extends FirebaseMessagingService {
     private static final String TAG = "FCM Service";
     Bitmap bitmap;
 
+    /**
+     * This method sends a notification to the user with information about their overdue book.
+     *
+     * @param remoteMessage
+     */
     @Override
     public void onMessageReceived(RemoteMessage remoteMessage) {
         // If the application is in the foreground handle both data and notification messages here.
@@ -61,7 +67,6 @@ public class FirebaseNotifications extends FirebaseMessagingService {
      *
      * @param messageBody FCM message body received.
      */
-
     private void sendNotification(String title, String messageBody, String iconUrl) {
         Intent intent = new Intent(this, SwipeViewActivity.class);
         intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);

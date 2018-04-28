@@ -10,9 +10,11 @@ import com.google.firebase.iid.FirebaseInstanceIdService;
 import com.google.firebase.messaging.FirebaseMessaging;
 
 /**
- * Created by shreshthkharbanda for FblaLibraryApp.
+ * This class is used to communicate with the FireBase database. This
+ * class specifically registers each individual user's id with database.
+ *
+ * @Shreshth Kharbanda
  */
-
 public class FirebaseId extends FirebaseInstanceIdService {
     private static final String TAG = "FirebaseIDService";
     public static final String myPrefs = "myPrefs" ;
@@ -21,6 +23,12 @@ public class FirebaseId extends FirebaseInstanceIdService {
 
     SharedPreferences sharedpreferences;
 
+    /**
+     * Persist token to third-party servers.
+     *
+     * Modify this method to associate the user's FCM InstanceID token with any server-side account
+     * maintained by your application.
+     */
     @Override
     public void onTokenRefresh() {
         // Get updated InstanceID token.

@@ -69,6 +69,17 @@ import static android.app.Activity.RESULT_CANCELED;
 import static android.app.Activity.RESULT_OK;
 import static android.content.Context.MODE_PRIVATE;
 
+/**
+ * This class controls the Book Database Fragment of the app. This Fragment
+ * displays all of the books in the Library's database and allows the user
+ * to share the books directly to any social media platform installed on their
+ * device, and search for specific books via the QR scanner and the book id number.
+ *
+ * Bugs: QR code was not functioning at first
+ *
+ * @Shreshth Kharbanda
+ */
+
 @SuppressWarnings("ConstantConditions")
 public class BookDatabaseFragment extends Fragment/* implements SearchView.OnQueryTextListener, SearchView.OnCloseListener*/ {
 
@@ -126,6 +137,14 @@ public class BookDatabaseFragment extends Fragment/* implements SearchView.OnQue
     //    EditText userEmailEdit;
 //    String userEmail = new LogInFragment().mEmailView.getText().toString();
 
+    /**
+     * This method
+     *
+     * @param inflater
+     * @param container
+     * @param savedInstanceState
+     * @return
+     */
     @Override
     public View onCreateView(@NonNull LayoutInflater inflater, final ViewGroup container,
                              final Bundle savedInstanceState) {
@@ -286,6 +305,9 @@ public class BookDatabaseFragment extends Fragment/* implements SearchView.OnQue
         return rootView;
     }
 
+    /**
+     * gets the books from the database and displays them in the app
+     */
     protected void showBookList() {
         try {
             JSONObject jsonObj = new JSONObject(myJSON);
@@ -323,6 +345,9 @@ public class BookDatabaseFragment extends Fragment/* implements SearchView.OnQue
         }
     }
 
+    /**
+     * gets all of the books from the database.
+     */
     public void getAllBooks() {
         @SuppressLint("StaticFieldLeak")
         class GetAllBooksClass extends AsyncTask<String, Void, String> {
@@ -368,6 +393,11 @@ public class BookDatabaseFragment extends Fragment/* implements SearchView.OnQue
         g.execute();
     }
 
+    /**
+     * this method is used for scanning the QR codes of books and checking them out.
+     *
+     * @param scanResult
+     */
     public void scanToBook(String scanResult) {
         inputStream = null;
         result2 = "";
@@ -426,7 +456,14 @@ public class BookDatabaseFragment extends Fragment/* implements SearchView.OnQue
         }
     }
 
-
+    /**
+     * this method either recieves the book ID from the scanned QR code or it displays
+     * that the QR scan has been canceled.
+     *
+     * @param requestCode
+     * @param resultCode
+     * @param intent
+     */
     public void onActivityResult(int requestCode, int resultCode, Intent intent) {
         if (requestCode == 0) {
             if (resultCode == RESULT_OK) {
@@ -439,6 +476,9 @@ public class BookDatabaseFragment extends Fragment/* implements SearchView.OnQue
         }
     }
 
+    /**
+     * this method begins scanning for the QR code of the app.
+     */
     private void startScan() {
         final MaterialBarcodeScanner materialBarcodeScanner = new MaterialBarcodeScannerBuilder()
                 .withActivity(getActivity())
@@ -474,6 +514,12 @@ public class BookDatabaseFragment extends Fragment/* implements SearchView.OnQue
         materialBarcodeScanner.startScan();
     }
 
+    /**
+     * capitalizes the first letter of the given String.
+     *
+     * @param string the string that needs to be capitalized.
+     * @return returns the given String with the first letter capitalized.
+     */
     public String capitalLowercase(String string) {
         String letter = string.substring(0, 1);
         String uppercaseLetter = letter.toUpperCase();
@@ -481,6 +527,21 @@ public class BookDatabaseFragment extends Fragment/* implements SearchView.OnQue
         return uppercaseLetter + string.substring(1).toLowerCase();
     }
 
+    /**
+     * this method checks out the given book to the user who is currently signed in.
+     *
+     * @param bookId
+     * @param userName
+     * @param bookTitle
+     * @param email
+     * @param libraryId
+     * @param author
+     * @param category
+     * @param callNum
+     * @param likes
+     * @param description
+     * @return returns whatever is returned from the php code.
+     */
     private String checkoutBook(final String bookId, final String userName, final String bookTitle, final String email, final String libraryId, final String author, final String category, final String callNum, final String likes, final String description) {
         List<NameValuePair> signUpPair = new ArrayList<>();
         signUpPair.add(new BasicNameValuePair("bookId", bookId));
@@ -525,6 +586,12 @@ public class BookDatabaseFragment extends Fragment/* implements SearchView.OnQue
         return result3;
     }
 
+    /**
+     * displays the action menu on the app.
+     *
+     * @param menu
+     * @param inflater
+     */
     @Override
     public void onCreateOptionsMenu(Menu menu, MenuInflater inflater) {
         inflater.inflate(R.menu.general_menu, menu);
@@ -533,6 +600,13 @@ public class BookDatabaseFragment extends Fragment/* implements SearchView.OnQue
 //        setupSearchView();
     }
 
+    /**
+     * opens the bug reporting system when the user clicks on the bug icon
+     * at the top right of the screen
+     *
+     * @param item
+     * @return returns true when the bug report has been sent.
+     */
     @RequiresApi(api = Build.VERSION_CODES.LOLLIPOP)
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
@@ -579,6 +653,21 @@ public class BookDatabaseFragment extends Fragment/* implements SearchView.OnQue
         return true;
     }
 
+    /**
+     * reserves the given book for the user who is currently signed in.
+     *
+     * @param bookId
+     * @param userName
+     * @param bookTitle
+     * @param email
+     * @param libraryId
+     * @param author
+     * @param category
+     * @param callNum
+     * @param likes
+     * @param description
+     * @return
+     */
     private String reserveBook(final String bookId, final String userName, final String bookTitle, final String email, final String libraryId, final String author, final String category, final String callNum, final String likes, final String description) {
         List<NameValuePair> signUpPair = new ArrayList<>();
         signUpPair.add(new BasicNameValuePair("bookId", bookId));
@@ -623,7 +712,9 @@ public class BookDatabaseFragment extends Fragment/* implements SearchView.OnQue
         return result3;
     }
 
-
+    /**
+     * method for setting up the search view for the book database.
+     */
     private void setupSearchView() {
 
         sv.setIconifiedByDefault(true);
@@ -672,6 +763,11 @@ public class BookDatabaseFragment extends Fragment/* implements SearchView.OnQue
         });
     }
 
+    /**
+     * gets all of the books that contain the desired queryWord.
+     *
+     * @param queryWord the key word that is being searched for.
+     */
     public void getAllSearchedBooks(final String queryWord) {
         @SuppressLint("StaticFieldLeak")
         class GetDataJSON extends AsyncTask<String, Void, String> {
@@ -751,6 +847,11 @@ public class BookDatabaseFragment extends Fragment/* implements SearchView.OnQue
         g.execute();
     }
 
+    /**
+     * displays all of the books that have been searched for.
+     *
+     * @param jsonData
+     */
     public void showAllSearchedBooks(String jsonData) {
         try {
             JSONObject jsonObj = new JSONObject(jsonData);

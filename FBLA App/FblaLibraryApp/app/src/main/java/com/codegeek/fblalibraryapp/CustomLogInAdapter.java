@@ -1,9 +1,5 @@
 package com.codegeek.fblalibraryapp;
 
-/**
- * Created by shreshthkharbanda for FblaLibraryApp.
- */
-
 import android.annotation.SuppressLint;
 import android.app.ProgressDialog;
 import android.content.Context;
@@ -52,6 +48,11 @@ import java.util.HashMap;
 
 import static com.codegeek.fblalibraryapp.LogInFragment.logInAdapter;
 
+/**
+ * This class is the adapter for the myAccount list
+ *
+ * @Shreshth Kharbanda
+ */
 public class CustomLogInAdapter extends SimpleAdapter {
     private Context context;
     private ArrayList<HashMap<String, String>> arrayList;
@@ -79,6 +80,15 @@ public class CustomLogInAdapter extends SimpleAdapter {
     private static final String TAG_LIKES = "likes";
     private static final String TAG_USER_FINE = "userFines";
 
+    /**
+     * sets up the login adapter.
+     *
+     * @param context
+     * @param data
+     * @param resource
+     * @param from
+     * @param to
+     */
     CustomLogInAdapter(Context context, ArrayList<HashMap<String, String>> data, int resource, String[] from, int[] to) {
         super(context, data, resource, from, to);
         this.context = context;
@@ -87,6 +97,14 @@ public class CustomLogInAdapter extends SimpleAdapter {
         liked = new LogInFragment().booleanLiked;
     }
 
+    /**
+     * loads and returns the current view for the app.
+     *
+     * @param position
+     * @param convertView
+     * @param parent
+     * @return
+     */
     @Override
     public View getView(final int position, final View convertView, ViewGroup parent) {
         View view = super.getView(position, convertView, parent);
@@ -158,6 +176,13 @@ public class CustomLogInAdapter extends SimpleAdapter {
         return view;
     }
 
+    /**
+     * updates if a book has been liked by the user.
+     *
+     * @param context
+     * @param idValue
+     * @param booleanLiked
+     */
     public void updateBooleanLiked(Context context, String idValue, String booleanLiked) {
         ArrayList<NameValuePair> nameValuePairs = new ArrayList<>();
 
@@ -205,11 +230,21 @@ public class CustomLogInAdapter extends SimpleAdapter {
         }
     }
 
+    /**
+     * refreshes the app.
+     */
     public void refresh() {
         //manipulate list
         notifyDataSetChanged();
     }
 
+    /**
+     * updates the number of likes for a book when the user chooses to like a given book.
+     *
+     * @param context
+     * @param idValue
+     * @param dataUrl
+     */
     public void updateLikes(Context context, String idValue, String dataUrl) {
         ArrayList<NameValuePair> nameValuePairs = new ArrayList<>();
 
@@ -256,7 +291,9 @@ public class CustomLogInAdapter extends SimpleAdapter {
         }
     }
 
-
+    /**
+     * retrieves the books that have been checked out by the user.
+     */
     public void getBooksOut() {
         @SuppressLint("StaticFieldLeak")
         class GetDataJSON extends AsyncTask<String, Void, String> {
@@ -331,6 +368,10 @@ public class CustomLogInAdapter extends SimpleAdapter {
         g.execute();
     }
 
+    /**
+     * displays all of the checked out books under the my account tab.
+     * @param jsonData recieves the jsonData for the checkedout books.
+     */
     public void showBooksCheckedOut(String jsonData) {
         InputStream inputStream = null;
         String result = "";
@@ -397,6 +438,13 @@ public class CustomLogInAdapter extends SimpleAdapter {
         }
     }
 
+    /**
+     * converts the inputStream into a String and returns the String format of the
+     * inputStream.
+     * @param inputStream the input stream that needs to be converted into a String.
+     * @return returns the String format of the inputStream.
+     * @throws IOException
+     */
     public String convertInputStreamToString(InputStream inputStream) throws IOException {
         BufferedReader bufferedReader = new BufferedReader(new InputStreamReader(inputStream));
         String line;
@@ -409,14 +457,26 @@ public class CustomLogInAdapter extends SimpleAdapter {
 
     }
 
+    /**
+     * sets the httpClient to the fiven httpClient.
+     * @param httpClient recives the httpClient.
+     */
     public void setHttpClient(HttpClient httpClient) {
         this.httpClient = httpClient;
     }
 
+    /**
+     * returns the login code.
+     * @return returns the login code.
+     */
     public int getLogInCode() {
         return logInCode;
     }
 
+    /**
+     * sets the login code to the given code.
+     * @param logInCode recieves the login code.
+     */
     public void setLogInCode(int logInCode) {
         this.logInCode = logInCode;
     }

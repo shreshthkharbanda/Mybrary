@@ -23,6 +23,12 @@ import com.jsibbold.zoomage.ZoomageView;
 
 import java.util.Objects;
 
+/**
+ * This class controls the fragment for the library map. It loads the report bug
+ * icon at the top right of the screen.
+ *
+ * @Shreshth Kharbanda
+ */
 public class LibraryMapFragment extends Fragment {
 
     ZoomageView libraryMap;
@@ -37,6 +43,15 @@ public class LibraryMapFragment extends Fragment {
     final String mybraryPassword = "MybraryPassword";
     AlertDialog reportBug;
 
+    /**
+     * This method loads the library map and also loads the options menu if
+     * a user is signed into the app.
+     *
+     * @param (inflater)
+     * @param (container)
+     * @param (savedInstanceState)
+     * @return returns the fragment containing the library map.
+     */
     @Override
     public View onCreateView(@NonNull LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
@@ -60,12 +75,26 @@ public class LibraryMapFragment extends Fragment {
         return rootView;
     }
 
-
+    /**
+     * This method is called when the options menu is created. The method
+     * sets up the action bar.
+     *
+     * @param (menu)
+     * @param (inflater)
+     */
     @Override
     public void onCreateOptionsMenu(Menu menu, MenuInflater inflater) {
         inflater.inflate(R.menu.general_menu, menu);
     }
 
+    /**
+     * This method is called when the user selects the icon to report a bug
+     * and opens the bug reporting system where the user can submit the details
+     * of the bug they have found.
+     *
+     * @param (item)
+     * @return returns true when the user has submitted their bug report
+     */
     @RequiresApi(api = Build.VERSION_CODES.LOLLIPOP)
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
