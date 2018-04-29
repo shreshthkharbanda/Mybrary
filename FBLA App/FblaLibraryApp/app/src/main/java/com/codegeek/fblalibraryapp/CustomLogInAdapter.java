@@ -114,7 +114,7 @@ public class CustomLogInAdapter extends SimpleAdapter {
         liked = arrayList.get(position).get(TAG_BOOLEAN_LIKED);
         //Toast.makeText(context, "After: " + arrayList.get(position).get(TAG_BOOLEAN_LIKED), Toast.LENGTH_SHORT).show();
 
-
+        // if the user has liked a book, change the like icon accordingly
         if (liked.equals("1")) {
             likeButton.setLiked(true);
         } else {
@@ -125,6 +125,7 @@ public class CustomLogInAdapter extends SimpleAdapter {
         likeButton.setOnLikeListener(new OnLikeListener() {
             LogInFragment lif = new LogInFragment();
 
+            // add a like and refresh the database
             @Override
             public void liked(final LikeButton likeButton) {
                 likeButton.animate();
@@ -148,6 +149,7 @@ public class CustomLogInAdapter extends SimpleAdapter {
 
             }
 
+            //remove a like and refresh the database
             @Override
             public void unLiked(final LikeButton likeButton) {
                 likeButton.animate();
@@ -164,8 +166,6 @@ public class CustomLogInAdapter extends SimpleAdapter {
                         new LogInFragment().refreshListAccount.invalidate();
                         new LogInFragment().refreshListAccount.requestLayout();
                         new LogInFragment().refreshListAccount.forceLayout();
-
-
                     }
                 });
 
@@ -386,6 +386,7 @@ public class CustomLogInAdapter extends SimpleAdapter {
             for (int i = 0; i < booksArray.length(); i++) {
                 JSONObject c = booksArray.getJSONObject(i);
 
+                // get all the book details in String format
                 String bookName = c.getString(TAG_BOOK_NAME);
                 String bookId = c.getString(TAG_BOOK_ID);
                 String userName = c.getString(TAG_USER);
@@ -397,7 +398,9 @@ public class CustomLogInAdapter extends SimpleAdapter {
                 String booleanLiked = c.getString(TAG_BOOLEAN_LIKED);
                 String userFine = c.getString(TAG_USER_FINE);
 //                Toast.makeText(getContext(), "userFines: " + userFine, Toast.LENGTH_SHORT).show();
+                // display the total fines for the yser
                 new LogInFragment().userFineText.setText("Your current fines are: $" + userFine);
+                // change font size and color if the user has any outstanding fines
                 if (!userFine.equals("0")) {
                     new LogInFragment().userFineText.setTextColor(Color.RED);
                     new LogInFragment().userFineText.setTextSize(25);
@@ -409,6 +412,7 @@ public class CustomLogInAdapter extends SimpleAdapter {
                 @SuppressLint("SimpleDateFormat") SimpleDateFormat sdf = new SimpleDateFormat("yyyyMMdd");
                 Date currentTime = Calendar.getInstance().getTime();
 
+                // add all the book details into persons
                 persons.put(TAG_BOOK_NAME, bookName);
                 persons.put(TAG_BOOK_ID, bookId);
                 persons.put(TAG_USER, userName);
@@ -420,6 +424,7 @@ public class CustomLogInAdapter extends SimpleAdapter {
                 persons.put(TAG_BOOLEAN_LIKED, booleanLiked);
                 persons.put(TAG_USER_FINE, userFine);
 
+                // add the book to the booklist
                 booksList.add(persons);
             }
             logInAdapter = new CustomLogInAdapter(context, booksList, R.layout.layout_account_list_item,

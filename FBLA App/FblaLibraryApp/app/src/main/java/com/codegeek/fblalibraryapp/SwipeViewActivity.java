@@ -133,6 +133,7 @@ public class SwipeViewActivity extends AppCompatActivity implements
                                         // never happens
                                     }
 
+                                    // remove the splash screen
                                     @Override
                                     public void onAnimationEnd(Animation animation) {
                                         // animation ended
@@ -143,7 +144,6 @@ public class SwipeViewActivity extends AppCompatActivity implements
                         }
                     });
                     try {
-                        // Sleep for 100 milliseconds.
                         Thread.sleep(new Random().nextInt(310) + 68);
                     } catch (InterruptedException e) {
                         e.printStackTrace();

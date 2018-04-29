@@ -181,6 +181,7 @@ public class BookDatabaseFragment extends Fragment/* implements SearchView.OnQue
                 } else {
                     builder = new AlertDialog.Builder(getContext());
                 }
+                // if the user has already maxed out their book checkout limit
                 if (LogInFragment.listAccount.getCount() >= 10) {
                     Toast.makeText(getContext(), "Sorry, you have reached the limit of checking out books. You have " + String.valueOf(LogInFragment.listAccount.getCount()) + " books checked out", Toast.LENGTH_LONG).show();
                     return;
@@ -188,6 +189,7 @@ public class BookDatabaseFragment extends Fragment/* implements SearchView.OnQue
                     Toast.makeText(getContext(), "Please login before checking out a book!", Toast.LENGTH_LONG).show();
                     return;
                 }
+                // when the user wants to reserve a book
                 builder.setTitle("Reserve Book")
                         .setMessage("How would you like to reserve this book?")
                         .setPositiveButton("Scan Book", new DialogInterface.OnClickListener() {
@@ -239,9 +241,11 @@ public class BookDatabaseFragment extends Fragment/* implements SearchView.OnQue
                                                 alertDialog.show();
 //==========================================================================================================================================================================================================================================
                                             } else {
+                                                // the book has been successfully checked out to the user
                                                 Toast.makeText(getContext(), "Book has successfully been checked out!", Toast.LENGTH_SHORT).show();
                                             }
                                         } else {
+                                            // books cannot be reserved because the user is currently logged out of their account
                                             Toast.makeText(getContext(), "Please login before checking out a book!", Toast.LENGTH_SHORT).show();
                                         }
                                     }
@@ -273,6 +277,7 @@ public class BookDatabaseFragment extends Fragment/* implements SearchView.OnQue
                 getAllBooks();
             }
         });
+        // set the color scheme for the app
         refreshList.setColorSchemeColors(
                 getResources().getColor(R.color.orange),
                 getResources().getColor(R.color.white),
@@ -283,6 +288,7 @@ public class BookDatabaseFragment extends Fragment/* implements SearchView.OnQue
             @Override
             public void onItemClick(AdapterView<?> adapterView, View view, int i, long l) {
                 try {
+                    // get the basic info about the book
                     JSONObject c = peoples.getJSONObject(i);
                     title = c.getString(TAG_TITLE);
                     authorLast = c.getString(TAG_AUTHOR_LAST);
@@ -313,8 +319,10 @@ public class BookDatabaseFragment extends Fragment/* implements SearchView.OnQue
             JSONObject jsonObj = new JSONObject(myJSON);
             peoples = jsonObj.getJSONArray(TAG_RESULTS);
 
+            // looop through each book in the database
             for (int i = 0; i < peoples.length(); i++) {
                 JSONObject c = peoples.getJSONObject(i);
+                // het the basic information about each book
                 id = c.getString(TAG_BOOK_ID);
                 title = c.getString(TAG_TITLE);
                 authorLast = c.getString(TAG_AUTHOR_LAST);
@@ -330,6 +338,7 @@ public class BookDatabaseFragment extends Fragment/* implements SearchView.OnQue
                 books.put(TAG_CALL_NUMBER, "#" + callNumber);
                 books.put(TAG_LIKES, "+" + likes);
 
+                // add the book to the book list
                 bookList.add(books);
             }
         } catch (JSONException e1) {
@@ -443,6 +452,7 @@ public class BookDatabaseFragment extends Fragment/* implements SearchView.OnQue
 
             for (int i = 0; i < peoples.length(); i++) {
                 JSONObject c = peoples.getJSONObject(i);
+                // get the information about the book
                 bookIdNumber = c.getString(TAG_BOOK_ID);
                 title = c.getString(TAG_TITLE);
                 authorLast = c.getString(TAG_AUTHOR_LAST);
@@ -506,6 +516,7 @@ public class BookDatabaseFragment extends Fragment/* implements SearchView.OnQue
                                     "\n" + "Book Description: " + description, Toast.LENGTH_LONG).show();
                             checkoutBook(bookIdNumber, LogInFragment.sendUserName(), bookList.get(Integer.parseInt(bookIdNumber) - 1).get(TAG_TITLE), LogInFragment.sendUserEmail(), LogInFragment.sendLibraryId(), authorLast, category, callNumber, likes, description);
                         } else {
+                            // tell the user to login before reserving a book
                             Toast.makeText(getContext(), "Please login before checking out a book!", Toast.LENGTH_SHORT).show();
                         }
                     }
@@ -857,8 +868,10 @@ public class BookDatabaseFragment extends Fragment/* implements SearchView.OnQue
             JSONObject jsonObj = new JSONObject(jsonData);
             peoples = jsonObj.getJSONArray(TAG_RESULTS);
 
+            // loop through the search results
             for (int i = 0; i < peoples.length(); i++) {
                 JSONObject c = peoples.getJSONObject(i);
+                // get the information for each book
                 id = c.getString(TAG_BOOK_ID);
                 title = c.getString(TAG_TITLE);
                 Log.v("Title", title);
@@ -875,6 +888,7 @@ public class BookDatabaseFragment extends Fragment/* implements SearchView.OnQue
                 books.put(TAG_CALL_NUMBER, "#" + callNumber);
                 books.put(TAG_LIKES, "+" + likes);
 
+                // add the book to the book list
                 bookList.add(books);
             }
         } catch (JSONException e1) {

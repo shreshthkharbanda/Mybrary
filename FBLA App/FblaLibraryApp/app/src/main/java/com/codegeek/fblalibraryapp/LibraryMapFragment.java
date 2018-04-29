@@ -99,7 +99,7 @@ public class LibraryMapFragment extends Fragment {
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
         switch (item.getItemId()) {
-            // profile settings icon clicked
+            // display the report bug view
             case R.id.reportBug:
                 reportBug = new AlertDialog.Builder(getContext())
                         .setView(reportBugView)
