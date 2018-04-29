@@ -4,7 +4,7 @@
 Description: This readme file is for the Mybrary application used by a library member of North Creek High School. It includes application installation instructions and detailed information about application features, technologies used, artifacts, and sources <br />
 Released Version: 1.0.0 <br />
 Released Date: Feb 26th 2018 <br />
-Author: Shreshth Kharbanda, Kashish Kharbanda, and Rishabh Jain; North Creek High School, Bothell WA <br />
+Authors: Shreshth Kharbanda, Kashish Kharbanda, and Rishabh Jain; North Creek High School, Bothell WA <br />
 *****************************************************************************************
 
 ## Installation Instructions:
