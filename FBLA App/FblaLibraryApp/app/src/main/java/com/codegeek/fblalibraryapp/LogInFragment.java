@@ -1506,26 +1506,18 @@ public class LogInFragment extends Fragment implements SearchView.OnCloseListene
     }
 
     public boolean onQueryTextChange(String newText) {
-        getSearchedBooksOut(newText);
+        logInAdapter.getFilter().filter(newText);
         return false;
     }
 
     public boolean onQueryTextSubmit(String query) {
-        getSearchedBooksOut(query);
+        logInAdapter.getFilter().filter(query);
         return false;
     }
 
     public boolean onClose() {
         return false;
     }
-/*
-    public void onClick(View view) {
-        if (view == mCloseButton) {
-            sv.setIconified(true);
-        } else if (view == mOpenButton) {
-            sv.setIconified(false);
-        }
-    }*/
 
     @Override
     public void onPrepareOptionsMenu(Menu menu) {
@@ -1536,163 +1528,5 @@ public class LogInFragment extends Fragment implements SearchView.OnCloseListene
             register.setVisible(true);
         }
         super.onPrepareOptionsMenu(menu);
-    }
-
-    public void getSearchedBooksOut(final String queryWord) {
-        @SuppressLint("StaticFieldLeak")
-        class GetDataJSON extends AsyncTask<String, Void, String> {
-            @Override
-            protected String doInBackground(String... params) {
-
-                InputStream inputStream;
-                String result;
-                String dataUrl = "http://ec2-52-41-161-91.us-west-2.compute.amazonaws.com/getSearchedBooksOut.php";
-
-                try {
-                    HttpClient httpclient = new DefaultHttpClient();
-                    httpPost = new HttpPost(dataUrl);
-                    String json1;
-
-                    JSONObject jsonObject = new JSONObject();
-                    jsonObject.accumulate("user", mEmailView.getText().toString());
-                    jsonObject.accumulate("queryWord", queryWord);
-
-                    json1 = jsonObject.toString();
-                    StringEntity se = new StringEntity(json1);
-                    httpPost.setEntity(se);
-                    httpPost.setHeader("Accept", "application/json");
-                    httpPost.setHeader("Content-type", "application/json");
-
-                    HttpResponse httpResponse = httpclient.execute(httpPost);
-                    inputStream = httpResponse.getEntity().getContent();
-                    result = convertInputStreamToString(inputStream);
-                    myJSON = result;
-                } catch (Exception e) {
-                    Log.d("InputStream", e.getLocalizedMessage());
-                }
-                httpPost.setHeader("Content-type", "application/json");
-
-                inputStream = null;
-                String result2 = null;
-                try {
-                    HttpResponse httpResponse = httpClient.execute(httpPost);
-                    HttpEntity entity = httpResponse.getEntity();
-
-                    inputStream = entity.getContent();
-
-                    BufferedReader bufferedReader = new BufferedReader(new InputStreamReader(inputStream, "UTF-8"), 8);
-                    StringBuilder stringBuilder = new StringBuilder();
-
-                    String line;
-                    while ((line = bufferedReader.readLine()) != null) {
-                        stringBuilder.append(line).append("\n");
-                    }
-                    result2 = stringBuilder.toString();
-                } catch (NullPointerException npe) {
-                    npe.printStackTrace();
-                    logInCode = 0;
-                } catch (IOException ioe) {
-                    ioe.printStackTrace();
-                    getActivity().runOnUiThread(new Runnable() {
-                        @Override
-                        public void run() {
-                            Toast.makeText(getContext(), "Input-Output Exception", Toast.LENGTH_LONG).show();
-                        }
-                    });
-                    logInCode = 0;
-                } finally {
-                    if (inputStream != null) try {
-                        inputStream.close();
-                    } catch (IOException e) {
-                        e.printStackTrace();
-                        logInCode = 0;
-                    }
-                }
-
-                return result2;
-            }
-
-            @Override
-            protected void onPostExecute(String result) {
-                showSearchedBooksOut(myJSON);
-            }
-        }
-        GetDataJSON g = new GetDataJSON();
-        g.execute();
-    }
-
-    public void showSearchedBooksOut(String jsonData) {
-        user = userEmail;
-        inputStream = null;
-        result = "";
-        dataUrl = "http://ec2-52-41-161-91.us-west-2.compute.amazonaws.com/getSearchedBooksOut.php";
-
-        try {
-            JSONObject jsonObj = new JSONObject(jsonData);
-
-            booksArray = jsonObj.getJSONArray(TAG_RESULTS);
-            booksList = new ArrayList<>();
-
-            for (int i = 0; i < booksArray.length(); i++) {
-                JSONObject c = booksArray.getJSONObject(i);
-
-                bookName = c.getString(TAG_BOOK_NAME);
-                bookId = c.getString(TAG_BOOK_ID);
-                userName = c.getString(TAG_USER_FIRST);
-                lastName = c.getString(TAG_USER_LAST);
-                libraryIdDatabase = c.getString(TAG_LIBRARY_ID);
-                dateOut = c.getString(TAG_OUT);
-                dateDue = c.getString(TAG_DUE);
-                id = c.getString(TAG_CHECKED_OUT_ID);
-                likes = c.getString(TAG_LIKES);
-                booleanLiked = c.getString(TAG_BOOLEAN_LIKED);
-                userFine = c.getString(TAG_USER_FINE);
-
-                if (bookName.equals(null) || bookName.isEmpty() || bookName.equalsIgnoreCase("null")) {
-                    continue;
-                }
-
-                if (Objects.equals(userFine, "")) {
-                    userFine = "0.00";
-                }
-                userFineText.setText("Your current fines are: $" + userFine);
-                if (!userFine.equals("0.00")) {
-                    userFineText.setTextColor(Color.RED);
-                    userFineText.setTextSize(25);
-                }
-
-
-                final HashMap<String, String> persons = new HashMap<>();
-
-                @SuppressLint("SimpleDateFormat") SimpleDateFormat sdf = new SimpleDateFormat("yyyyMMdd");
-                Date currentTime = Calendar.getInstance().getTime();
-
-                persons.put(TAG_BOOK_NAME, bookName);
-                persons.put(TAG_BOOK_ID, bookId);
-                persons.put(TAG_USER_FIRST, userName + " " + lastName);
-                persons.put(TAG_LIBRARY_ID, libraryIdDatabase);
-                persons.put(TAG_OUT, dateOut);
-                persons.put(TAG_DUE, dateDue);
-                persons.put(TAG_CHECKED_OUT_ID, id);
-                persons.put(TAG_LIKES, "+" + likes);
-                persons.put(TAG_BOOLEAN_LIKED, booleanLiked);
-                persons.put(TAG_USER_FINE, userFine);
-
-                booksList.add(persons);
-            }
-            logInAdapter = new CustomLogInAdapter(getContext(), booksList, R.layout.layout_account_list_item,
-                    new String[]{TAG_BOOK_NAME, TAG_USER_FIRST, TAG_OUT, TAG_DUE, TAG_CHECKED_OUT_ID, TAG_BOOK_ID, TAG_LIKES, TAG_BOOLEAN_LIKED},
-                    new int[]{R.id.bookName, R.id.userName, R.id.outDate, R.id.dueDate, R.id.checkedOutId, R.id.bookId, R.id.numberOfLikes, R.id.booleanLiked}
-            );
-
-            try {
-                listAccount.setAdapter(logInAdapter);
-            } catch (NullPointerException npe) {
-                npe.printStackTrace();
-            }
-
-        } catch (Exception e) {
-            e.printStackTrace();
-        }
     }
 }
