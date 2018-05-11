@@ -1,12 +1,13 @@
 <?xml version="1.0" encoding="utf-8"?>
 <menu xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto">
-    <item
-        android:id="@+id/item_search_catalogue"
+    <!--<item
+        android:id="@+id/item_search_database"
         android:icon="@drawable/search_icon"
         android:title="Search"
         app:actionViewClass="android.widget.SearchView"
         app:showAsAction="always" />
+    -->
     <item
         android:id="@+id/reportBug"
         android:icon="@drawable/report_bug"

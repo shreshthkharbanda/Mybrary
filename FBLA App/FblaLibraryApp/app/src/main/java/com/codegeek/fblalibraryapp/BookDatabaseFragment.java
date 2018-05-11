@@ -106,7 +106,6 @@ public class BookDatabaseFragment extends Fragment/* implements SearchView.OnQue
     String likes;
     String description;
     SwipeRefreshLayout refreshList;
-    SimpleAdapter adapter;
     InputStream inputStream = null;
     String result2;
     String url;
@@ -130,7 +129,7 @@ public class BookDatabaseFragment extends Fragment/* implements SearchView.OnQue
     View changePassView;
     View reportBugView;
     EditText explainBug;
-    final String mybraryEmail = "MybraryHelp@gmail.com";
+    final String mybraryEmail = "mybraryHelp@gmail.com";
     final String mybraryPassword = "MybraryPassword";
     AlertDialog reportBug;
 
@@ -191,8 +190,8 @@ public class BookDatabaseFragment extends Fragment/* implements SearchView.OnQue
                     return;
                 }
                 // when the user wants to reserve a book
-                builder.setTitle("Reserve Book")
-                        .setMessage("How would you like to reserve this book?")
+                builder.setTitle("Checkout Book")
+                        .setMessage("How would you like to checkout this book?")
                         .setPositiveButton("Scan Book", new DialogInterface.OnClickListener() {
                             public void onClick(DialogInterface dialog, int which) {
                                 // scan book
@@ -220,9 +219,11 @@ public class BookDatabaseFragment extends Fragment/* implements SearchView.OnQue
 //                                            Toast.makeText(getContext(), checkoutResult, Toast.LENGTH_SHORT).show();
                                             if (checkoutResult.trim().equalsIgnoreCase("Book already checked out")) {
                                                 Toast.makeText(getContext(), "The book you are trying to checkout is already checked out!", Toast.LENGTH_SHORT).show();
+
+//==========================================================================================================================================================================================================================================
                                                 final AlertDialog alertDialog = new AlertDialog.Builder(getContext()).create();
                                                 alertDialog.setTitle("Reserve Book");
-                                                alertDialog.setMessage("The book \"" + bookList.get(Integer.parseInt(bookIdNumber) - 1).get(TAG_TITLE) + "\" is already reserved. Wold you like to reserve this book?");
+                                                alertDialog.setMessage("The book \"" + bookList.get(Integer.parseInt(bookIdNumber) - 1).get(TAG_TITLE) + "\" is already checked out. Wold you like to reserve this book?");
                                                 alertDialog.setButton(AlertDialog.BUTTON_POSITIVE, "Yes",
                                                         new DialogInterface.OnClickListener() {
                                                             public void onClick(DialogInterface dialog, int which) {
@@ -238,6 +239,7 @@ public class BookDatabaseFragment extends Fragment/* implements SearchView.OnQue
                                                             }
                                                         });
                                                 alertDialog.show();
+//==========================================================================================================================================================================================================================================
                                             } else {
                                                 // the book has been successfully checked out to the user
                                                 Toast.makeText(getContext(), "Book has successfully been checked out!", Toast.LENGTH_SHORT).show();
@@ -343,7 +345,7 @@ public class BookDatabaseFragment extends Fragment/* implements SearchView.OnQue
             e1.printStackTrace();
         }
         if (getActivity() != null) {
-            adapter = new SimpleAdapter(
+            ListAdapter adapter = new SimpleAdapter(
                     getActivity(), bookList, R.layout.book_database_title,
                     new String[]{TAG_TITLE, TAG_AUTHOR_LAST, TAG_CATEGORY, TAG_CALL_NUMBER, TAG_BOOK_ID, TAG_LIKES},
                     new int[]{R.id.bookTitle, R.id.authorLastName, R.id.bookCategory, R.id.bookCallNumber, R.id.bookId, R.id.numberOfLikes}
@@ -604,9 +606,9 @@ public class BookDatabaseFragment extends Fragment/* implements SearchView.OnQue
     @Override
     public void onCreateOptionsMenu(Menu menu, MenuInflater inflater) {
         inflater.inflate(R.menu.general_menu, menu);
-        databaseMenu = menu;
-        sv = (SearchView) menu.findItem(R.id.item_search_catalogue).getActionView();
-        setupSearchView();
+//        databaseMenu = menu;
+//        sv = (SearchView) menu.findItem(R.id.item_search_database).getActionView();
+//        setupSearchView();
     }
 
     /**
@@ -746,15 +748,162 @@ public class BookDatabaseFragment extends Fragment/* implements SearchView.OnQue
         sv.setOnQueryTextListener(new SearchView.OnQueryTextListener() {
             @Override
             public boolean onQueryTextSubmit(String s) {
-                adapter.getFilter().filter(s);
+                getActivity().runOnUiThread(new Runnable() {
+                    @Override
+                    public void run() {
+                        Toast.makeText(getContext(), "Submit Query", Toast.LENGTH_SHORT).show();
+                    }
+                });
+
+                getAllSearchedBooks(s);
                 return false;
             }
 
             @Override
             public boolean onQueryTextChange(String s) {
-                adapter.getFilter().filter(s);
+
+                getActivity().runOnUiThread(new Runnable() {
+                    @Override
+                    public void run() {
+                        Toast.makeText(getContext(), "Text Change J", Toast.LENGTH_SHORT).show();
+                    }
+                });
+                getAllSearchedBooks(s);
                 return false;
             }
         });
+    }
+
+    /**
+     * gets all of the books that contain the desired queryWord.
+     *
+     * @param queryWord the key word that is being searched for.
+     */
+    public void getAllSearchedBooks(final String queryWord) {
+        @SuppressLint("StaticFieldLeak")
+        class GetDataJSON extends AsyncTask<String, Void, String> {
+            @Override
+            protected String doInBackground(String... params) {
+
+                InputStream inputStream;
+                String result;
+                String dataUrl = "http://ec2-52-41-161-91.us-west-2.compute.amazonaws.com/getSearchedBooks.php";
+
+                try {
+
+                    HttpClient httpclient = new DefaultHttpClient();
+                    httpPost = new HttpPost(dataUrl);
+                    String json1;
+
+                    JSONObject jsonObject = new JSONObject();
+                    jsonObject.accumulate("queryWord", queryWord);
+
+                    json1 = jsonObject.toString();
+                    StringEntity se = new StringEntity(json1);
+                    httpPost.setEntity(se);
+                    httpPost.setHeader("Accept", "application/json");
+                    httpPost.setHeader("Content-type", "application/json");
+
+                    HttpResponse httpResponse = httpclient.execute(httpPost);
+                    inputStream = httpResponse.getEntity().getContent();
+                    result = new LogInFragment().convertInputStreamToString(inputStream);
+                    myJSON = result;
+                } catch (Exception e) {
+                    Log.d("InputStream", e.getLocalizedMessage());
+                }
+                httpPost.setHeader("Content-type", "application/json");
+
+                inputStream = null;
+                String result2 = null;
+                try {
+                    HttpResponse httpResponse = httpClient.execute(httpPost);
+                    HttpEntity entity = httpResponse.getEntity();
+
+                    inputStream = entity.getContent();
+
+                    BufferedReader bufferedReader = new BufferedReader(new InputStreamReader(inputStream, "UTF-8"), 8);
+                    StringBuilder stringBuilder = new StringBuilder();
+
+                    String line;
+                    while ((line = bufferedReader.readLine()) != null) {
+                        stringBuilder.append(line).append("\n");
+                    }
+                    result2 = stringBuilder.toString();
+                } catch (NullPointerException npe) {
+                    npe.printStackTrace();
+                } catch (IOException ioe) {
+                    ioe.printStackTrace();
+                    getActivity().runOnUiThread(new Runnable() {
+                        @Override
+                        public void run() {
+                            Toast.makeText(getContext(), "Input-Output Exception", Toast.LENGTH_SHORT).show();
+                        }
+                    });
+                } finally {
+                    if (inputStream != null) try {
+                        inputStream.close();
+                    } catch (IOException e) {
+                        e.printStackTrace();
+                    }
+                }
+                return result2;
+            }
+
+            @Override
+            protected void onPostExecute(String result) {
+                showAllSearchedBooks(myJSON);
+            }
+        }
+        GetDataJSON g = new GetDataJSON();
+        g.execute();
+    }
+
+    /**
+     * displays all of the books that have been searched for.
+     *
+     * @param jsonData
+     */
+    public void showAllSearchedBooks(String jsonData) {
+        try {
+            JSONObject jsonObj = new JSONObject(jsonData);
+            peoples = jsonObj.getJSONArray(TAG_RESULTS);
+
+            // loop through the search results
+            for (int i = 0; i < peoples.length(); i++) {
+                JSONObject c = peoples.getJSONObject(i);
+                // get the information for each book
+                id = c.getString(TAG_BOOK_ID);
+                title = c.getString(TAG_TITLE);
+                Log.v("Title", title);
+                authorLast = c.getString(TAG_AUTHOR_LAST);
+                category = c.getString(TAG_CATEGORY);
+                callNumber = c.getString(TAG_CALL_NUMBER);
+                likes = c.getString(TAG_LIKES);
+
+                books = new HashMap<>();
+                books.put(TAG_BOOK_ID, id);
+                books.put(TAG_TITLE, capitalLowercase(title));
+                books.put(TAG_AUTHOR_LAST, authorLast);
+                books.put(TAG_CATEGORY, category);
+                books.put(TAG_CALL_NUMBER, "#" + callNumber);
+                books.put(TAG_LIKES, "+" + likes);
+
+                // add the book to the book list
+                bookList.add(books);
+            }
+        } catch (JSONException e1) {
+            Log.v("JSONException", e1.toString());
+            e1.printStackTrace();
+        }
+        if (getActivity() != null) {
+            ListAdapter adapter = new SimpleAdapter(
+                    getActivity(), bookList, R.layout.book_database_title,
+                    new String[]{TAG_TITLE, TAG_AUTHOR_LAST, TAG_CATEGORY, TAG_CALL_NUMBER, TAG_BOOK_ID, TAG_LIKES},
+                    new int[]{R.id.bookTitle, R.id.authorLastName, R.id.bookCategory, R.id.bookCallNumber, R.id.bookId, R.id.numberOfLikes}
+            );
+            listView.setAdapter(adapter);
+        } else {
+            Toast.makeText(getContext(), "Activity is null", Toast.LENGTH_SHORT).show();
+        }
     }
 }

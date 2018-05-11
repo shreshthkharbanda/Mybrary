@@ -106,6 +106,7 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_alignParentBottom="true"
+            android:layout_alignParentStart="true"
             android:gravity="center_horizontal"
             android:text="@string/no_account"
             android:textColor="@color/hyperlinkColor"
@@ -161,7 +162,8 @@
             android:id="@+id/userFineText"
             android:text="@string/your_fines"
             android:textColor="#000000"
-            android:textSize="10sp" />
+            android:textSize="10sp"
+            tools:ignore="SmallSp" />
 
         <android.support.v4.widget.SwipeRefreshLayout
             android:id="@+id/refreshListAccount"
@@ -174,14 +176,33 @@
                 android:id="@+id/accountListView"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:layout_above="@+id/logOutButton"
+                android:layout_above="@+id/recommendationsList"
                 android:layout_alignParentTop="true"
                 android:clickable="true"
                 android:divider="#000"
                 android:dividerHeight="1dip"
                 android:focusable="true"
-                tools:ignore="RtlHardcoded" />
+                tools:ignore="RtlHardcoded"
+                android:layout_marginBottom="200dp"/>
         </android.support.v4.widget.SwipeRefreshLayout>
+
+       <!-- <ListView
+            android:id="@+id/recommendationsList"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_above="@+id/logOutButton"
+            android:layout_alignParentTop="true"
+            android:clickable="true"
+            android:divider="#000"
+            android:dividerHeight="1dip"
+            android:focusable="true"
+            tools:ignore="RtlHardcoded" />-->
+
+        <com.meetme.android.horizontallistview.HorizontalListView xmlns:android="http://schemas.android.com/apk/res/android"
+            android:id="@+id/recommendationList"
+            android:layout_width="match_parent"
+            android:layout_height="200dp"
+            android:layout_above="@+id/logOutButton" />
 
         <Button
             android:id="@+id/logOutButton"
