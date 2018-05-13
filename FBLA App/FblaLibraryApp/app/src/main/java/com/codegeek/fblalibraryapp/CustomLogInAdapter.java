@@ -109,10 +109,7 @@ public class CustomLogInAdapter extends SimpleAdapter {
     public View getView(final int position, final View convertView, ViewGroup parent) {
         View view = super.getView(position, convertView, parent);
         LikeButton likeButton = view.findViewById(R.id.like_button);
-//        checkedOut = (TextView) view.findViewById(R.id.checkedOutId);
-        //Toast.makeText(context, "Before: " + arrayList.get(position).get(TAG_BOOLEAN_LIKED), Toast.LENGTH_SHORT).show();
         liked = arrayList.get(position).get(TAG_BOOLEAN_LIKED);
-        //Toast.makeText(context, "After: " + arrayList.get(position).get(TAG_BOOLEAN_LIKED), Toast.LENGTH_SHORT).show();
 
         // if the user has liked a book, change the like icon accordingly
         if (liked.equals("1")) {
@@ -370,6 +367,7 @@ public class CustomLogInAdapter extends SimpleAdapter {
 
     /**
      * displays all of the checked out books under the my account tab.
+     *
      * @param jsonData recieves the jsonData for the checkedout books.
      */
     public void showBooksCheckedOut(String jsonData) {
@@ -397,7 +395,6 @@ public class CustomLogInAdapter extends SimpleAdapter {
                 String likes = c.getString(TAG_LIKES);
                 String booleanLiked = c.getString(TAG_BOOLEAN_LIKED);
                 String userFine = c.getString(TAG_USER_FINE);
-//                Toast.makeText(getContext(), "userFines: " + userFine, Toast.LENGTH_SHORT).show();
                 // display the total fines for the yser
                 new LogInFragment().userFineText.setText("Your current fines are: $" + userFine);
                 // change font size and color if the user has any outstanding fines
@@ -446,6 +443,7 @@ public class CustomLogInAdapter extends SimpleAdapter {
     /**
      * converts the inputStream into a String and returns the String format of the
      * inputStream.
+     *
      * @param inputStream the input stream that needs to be converted into a String.
      * @return returns the String format of the inputStream.
      * @throws IOException
@@ -464,6 +462,7 @@ public class CustomLogInAdapter extends SimpleAdapter {
 
     /**
      * sets the httpClient to the fiven httpClient.
+     *
      * @param httpClient recives the httpClient.
      */
     public void setHttpClient(HttpClient httpClient) {
@@ -472,6 +471,7 @@ public class CustomLogInAdapter extends SimpleAdapter {
 
     /**
      * returns the login code.
+     *
      * @return returns the login code.
      */
     public int getLogInCode() {
@@ -480,6 +480,7 @@ public class CustomLogInAdapter extends SimpleAdapter {
 
     /**
      * sets the login code to the given code.
+     *
      * @param logInCode recieves the login code.
      */
     public void setLogInCode(int logInCode) {

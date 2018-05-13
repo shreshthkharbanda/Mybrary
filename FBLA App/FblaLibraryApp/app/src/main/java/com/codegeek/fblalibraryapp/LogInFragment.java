@@ -1,6 +1,7 @@
 package com.codegeek.fblalibraryapp;
 
 import android.annotation.SuppressLint;
+import android.app.ActionBar;
 import android.app.ProgressDialog;
 import android.app.SearchManager;
 import android.app.SearchableInfo;
@@ -8,6 +9,8 @@ import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.SharedPreferences;
+import android.content.pm.PackageInfo;
+import android.content.pm.PackageManager;
 import android.graphics.Color;
 import android.net.Uri;
 import android.os.AsyncTask;
@@ -15,6 +18,7 @@ import android.os.Build;
 import android.os.Bundle;
 import android.os.Handler;
 import android.os.StrictMode;
+import android.preference.PreferenceManager;
 import android.support.annotation.RequiresApi;
 import android.support.design.widget.TextInputEditText;
 import android.support.v4.app.Fragment;
@@ -55,6 +59,7 @@ import org.apache.http.client.methods.HttpPost;
 import org.apache.http.entity.StringEntity;
 import org.apache.http.impl.client.DefaultHttpClient;
 import org.apache.http.message.BasicNameValuePair;
+import org.apache.http.params.BasicHttpParams;
 import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
@@ -71,14 +76,17 @@ import java.net.MalformedURLException;
 import java.net.URL;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.Calendar;
 import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 import java.util.Objects;
 import java.util.Random;
 
 import static android.content.Context.MODE_PRIVATE;
+import static android.provider.ContactsContract.Directory.PACKAGE_NAME;
 
 /**
  * This class exists with 3 main functions. The first main function for this class is the login.
@@ -106,7 +114,6 @@ public class LogInFragment extends Fragment implements SearchView.OnCloseListene
     View singleBookInfo;
     public Button logInButton;
     public static ListView listAccount;
-    public static ListView recommendationList;
     String user;
     String password;
     String myJSON;
@@ -208,7 +215,6 @@ public class LogInFragment extends Fragment implements SearchView.OnCloseListene
 
     String id;
     String title;
-    //    String firstName;
     String authorLast;
     String category;
     String callNumber;
@@ -235,20 +241,16 @@ public class LogInFragment extends Fragment implements SearchView.OnCloseListene
     AlertDialog reportBug;
     SearchView sv;
 
-    JSONArray peoples;
-    SimpleAdapter adapter;
-
     @Override
     public View onCreateView(final LayoutInflater inflater, final ViewGroup container,
                              Bundle savedInstanceState) {
 
-//      Initializing variables and assigning variables to the UI components
+    //  Initializing variables and assigning variables to the UI components
         logInView = inflater.inflate(R.layout.fragment_log_in, container, false);
         mEmailView = logInView.findViewById(R.id.logInEmailEdit);
         mPasswordView = logInView.findViewById(R.id.logInPasswordEdit);
         userFineText = logInView.findViewById(R.id.userFineText);
         listAccount = logInView.findViewById(R.id.accountListView);
-        recommendationList = logInView.findViewById(R.id.recommendationList);
         logInButton = logInView.findViewById(R.id.email_sign_in_button);
         logInLayout = logInView.findViewById(R.id.linearLayoutLogIn);
         accountLayout = logInView.findViewById(R.id.accountLayoutLogIn);
@@ -310,7 +312,7 @@ public class LogInFragment extends Fragment implements SearchView.OnCloseListene
             @Override
             public void onClick(View view) {
 
-//              Validating sign up information entered and if it is all valid, register the user into the database.
+        //  Validating sign up information entered and if it is all valid, register the user into the database.
 
                 if (libraryId.getText().toString().length() == 6 && (signUpPassword.getText().toString().equals(signUpPassword2.getText().toString()) && !(signUpFirst == null)
                         && !(signUpLast == null) && !(signUpEmail == null) && !(signUpPassword == null)
@@ -355,7 +357,7 @@ public class LogInFragment extends Fragment implements SearchView.OnCloseListene
             }
         });
 
-//      Change screen to sign up screen when user clicks the text "No Account Yet? Create One"
+        // Change screen to sign up screen when user clicks the text "No Account Yet? Create One"
         createAccount.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
@@ -365,7 +367,7 @@ public class LogInFragment extends Fragment implements SearchView.OnCloseListene
             }
         });
 
-//      Detects user's action of pulling to refresh the list
+        // Detects user's action of pulling to refresh the list
         refreshListAccount.setOnRefreshListener(new SwipeRefreshLayout.OnRefreshListener() {
             @Override
             public void onRefresh() {
@@ -374,7 +376,6 @@ public class LogInFragment extends Fragment implements SearchView.OnCloseListene
                     public void run() {
                         refreshListAccount.setRefreshing(false);
                         checkCredentials(mEmailView.getText().toString(), mPasswordView.getText().toString());
-//                        getBooksOut();
                         getBooksOut();
                         logInLayout.setVisibility(View.GONE);
                         accountLayout.setVisibility(View.VISIBLE);
@@ -405,7 +406,6 @@ public class LogInFragment extends Fragment implements SearchView.OnCloseListene
                 loggedInEditor = loggedInPrefs.edit();
                 loggedInEditor.putString("stayLoggedIn", "no");
                 loggedInEditor.apply();
-//                setHasOptionsMenu(false);
                 setHasOptionsMenu(true);
                 loggedIn = false;
                 logInCode = 0;
@@ -423,11 +423,7 @@ public class LogInFragment extends Fragment implements SearchView.OnCloseListene
                     usernameEditor.putString("username", mEmailView.getText().toString());
                     usernameEditor.apply();
                 } else {
-                    try {
-                        usernameEditor.clear().apply();
-                    } catch (Exception ignored) {
-
-                    }
+                    usernameEditor.clear().apply();
                 }
             }
         });
@@ -604,7 +600,9 @@ public class LogInFragment extends Fragment implements SearchView.OnCloseListene
     public void getBooksOut() {
 //      Suppress StaticFieldLeaks
         @SuppressLint("StaticFieldLeak")
+
 //      AsyncTask Class of Type String, Void, String
+
         class GetDataJSON extends AsyncTask<String, Void, String> {
             @Override
             protected String doInBackground(String... params) {
@@ -683,7 +681,7 @@ public class LogInFragment extends Fragment implements SearchView.OnCloseListene
                 return result2;
             }
 
-            //          Calls the method showBooksCheckedOut and gives an input of the JSON data
+            //  Calls the method showBooksCheckedOut and gives an input of the JSON data
             @Override
             protected void onPostExecute(String result) {
                 showBooksCheckedOut(myJSON);
@@ -703,8 +701,6 @@ public class LogInFragment extends Fragment implements SearchView.OnCloseListene
         user = userEmail;
         inputStream = null;
         result = "";
-//        dataUrl = "http://ec2-52-41-161-91.us-west-2.compute.amazonaws.com/booksCheckedOut.php";
-
         try {
             JSONObject jsonObj = new JSONObject(jsonData);
 
@@ -1376,7 +1372,6 @@ public class LogInFragment extends Fragment implements SearchView.OnCloseListene
         inflater.inflate(R.menu.account_menu, menu);
         accountMenu = menu;
         sv = (SearchView) menu.findItem(R.id.item_search_account).getActionView();
-//        sv = (SearchView) menu.findItem(R.id.item_search_account).getActionView();
         setupSearchView();
 
         if (!loggedIn) {
@@ -1473,7 +1468,6 @@ public class LogInFragment extends Fragment implements SearchView.OnCloseListene
                 changePassDialog.show();
                 break;
             case R.id.item_search_account:
-//                sv = (SearchView) accountMenu.findItem(R.id.item_search_account).getActionView();
                 setupSearchView();
             default:
                 break;
@@ -1518,14 +1512,6 @@ public class LogInFragment extends Fragment implements SearchView.OnCloseListene
     public boolean onClose() {
         return false;
     }
-/*
-    public void onClick(View view) {
-        if (view == mCloseButton) {
-            sv.setIconified(true);
-        } else if (view == mOpenButton) {
-            sv.setIconified(false);
-        }
-    }*/
 
     @Override
     public void onPrepareOptionsMenu(Menu menu) {
@@ -1687,156 +1673,12 @@ public class LogInFragment extends Fragment implements SearchView.OnCloseListene
 
             try {
                 listAccount.setAdapter(logInAdapter);
-                for (int j = 0; j <= listAccount.getCount(); j++) {
-//                    getRecommendations(listAccount.getItemAtPosition(j).toString());
-                    Log.v("CategoryString", category);
-                    getRecommendations(category);
-                }
             } catch (NullPointerException npe) {
                 npe.printStackTrace();
             }
 
-        } catch (
-                Exception e)
-
-        {
+        } catch (Exception e) {
             e.printStackTrace();
-        }
-
-    }
-
-
-    /**
-     * gets all of the books that contain the desired queryWord.
-     *
-     * @param category the key word that is being searched for.
-     */
-    public void getRecommendations(final String category) {
-        @SuppressLint("StaticFieldLeak")
-        class GetDataJSON extends AsyncTask<String, Void, String> {
-            @Override
-            protected String doInBackground(String... params) {
-
-                Log.v("Enter recommendations", "Successfully entered");
-
-                InputStream inputStream;
-                String result;
-                String dataUrl = "http://ec2-52-41-161-91.us-west-2.compute.amazonaws.com/getRecommendations.php";
-
-                try {
-
-                    HttpClient httpclient = new DefaultHttpClient();
-                    httpPost = new HttpPost(dataUrl);
-                    String json1;
-
-                    JSONObject jsonObject = new JSONObject();
-                    jsonObject.accumulate("category", category);
-
-                    json1 = jsonObject.toString();
-                    StringEntity se = new StringEntity(json1);
-                    httpPost.setEntity(se);
-                    httpPost.setHeader("Accept", "application/json");
-                    httpPost.setHeader("Content-type", "application/json");
-
-                    HttpResponse httpResponse = httpclient.execute(httpPost);
-                    inputStream = httpResponse.getEntity().getContent();
-                    result = new LogInFragment().convertInputStreamToString(inputStream);
-                    myJSON = result;
-                } catch (Exception e) {
-                    Log.d("InputStream", e.getLocalizedMessage());
-                }
-                httpPost.setHeader("Content-type", "application/json");
-
-                inputStream = null;
-                String result2 = null;
-                try {
-                    HttpResponse httpResponse = httpClient.execute(httpPost);
-                    HttpEntity entity = httpResponse.getEntity();
-
-                    inputStream = entity.getContent();
-
-                    BufferedReader bufferedReader = new BufferedReader(new InputStreamReader(inputStream, "UTF-8"), 8);
-                    StringBuilder stringBuilder = new StringBuilder();
-
-                    String line;
-                    while ((line = bufferedReader.readLine()) != null) {
-                        stringBuilder.append(line).append("\n");
-                    }
-                    result2 = stringBuilder.toString();
-                } catch (NullPointerException npe) {
-                    npe.printStackTrace();
-                } catch (IOException ioe) {
-                    ioe.printStackTrace();
-                    getActivity().runOnUiThread(new Runnable() {
-                        @Override
-                        public void run() {
-                            Toast.makeText(getContext(), "Input-Output Exception", Toast.LENGTH_SHORT).show();
-                        }
-                    });
-                } finally {
-                    if (inputStream != null) try {
-                        inputStream.close();
-                    } catch (IOException e) {
-                        e.printStackTrace();
-                    }
-                }
-                return result2;
-            }
-
-            @Override
-            protected void onPostExecute(String result) {
-                showRecommendations(myJSON);
-            }
-        }
-        GetDataJSON g = new GetDataJSON();
-        g.execute();
-    }
-
-    /**
-     * displays all of the books that have been searched for.
-     *
-     * @param jsonData
-     */
-    public void showRecommendations(String jsonData) {
-        try {
-            JSONObject jsonObj = new JSONObject(jsonData);
-            peoples = jsonObj.getJSONArray(TAG_RESULTS);
-
-            // loop through the search results
-            for (int i = 0; i < peoples.length(); i++) {
-                JSONObject c = peoples.getJSONObject(i);
-                // get the information for each book
-                id = c.getString(TAG_BOOK_ID);
-                title = c.getString(TAG_TITLE);
-                Log.v("Title", title);
-                authorLast = c.getString(TAG_AUTHOR_LAST);
-                category = c.getString(TAG_CATEGORY);
-                callNumber = c.getString(TAG_CALL_NUMBER);
-                likes = c.getString(TAG_LIKES);
-
-                books = new HashMap<>();
-                books.put(TAG_BOOK_ID, id);
-                books.put(TAG_AUTHOR_LAST, authorLast);
-                books.put(TAG_CATEGORY, category);
-                books.put(TAG_CALL_NUMBER, "#" + callNumber);
-                books.put(TAG_LIKES, "+" + likes);
-
-                // add the book to the book list
-                bookList.add(books);
-            }
-        } catch (JSONException e1) {
-            Log.v("JSONException", e1.toString());
-            e1.printStackTrace();
-        }
-        if (getActivity() != null) {
-            adapter = new SimpleAdapter(
-                    getActivity(), bookList, R.layout.book_database_title,
-                    new String[]{TAG_TITLE, TAG_AUTHOR_LAST, TAG_CATEGORY, TAG_CALL_NUMBER, TAG_BOOK_ID, TAG_LIKES},
-                    new int[]{R.id.bookTitle, R.id.authorLastName, R.id.bookCategory, R.id.bookCallNumber, R.id.bookId, R.id.numberOfLikes}
-            );
-            recommendationList.setAdapter(adapter);
-        } else {
-            Toast.makeText(getContext(), "Activity is null", Toast.LENGTH_SHORT).show();
         }
     }
 }

@@ -23,13 +23,13 @@ import java.util.Properties;
  */
 public class GMailSender extends javax.mail.Authenticator {
 
-//  Define variables
+    //  Define variables
     private String mailhost = "smtp.gmail.com";
     private String user;
     private String password;
     private Session session;
 
-//  Add JSSEProvider class as a security provider
+    //  Add JSSEProvider class as a security provider
     static {
         Security.addProvider(new JSSEProvider());
     }
@@ -38,7 +38,7 @@ public class GMailSender extends javax.mail.Authenticator {
      * This method creates and returns a GMailSender object with the given
      * email and password
      *
-     * @param (user) the user's email
+     * @param (user)     the user's email
      * @param (password) the user's email password
      * @return a GMailSender object with the given user and password
      */
@@ -46,7 +46,7 @@ public class GMailSender extends javax.mail.Authenticator {
         this.user = user;
         this.password = password;
 
-//      Setup properties of email sending.
+    //  Setup properties of email sending.
         Properties props = new Properties();
         props.setProperty("mail.transport.protocol", "smtp");
         props.setProperty("mail.host", mailhost);
@@ -63,6 +63,7 @@ public class GMailSender extends javax.mail.Authenticator {
 
     /**
      * This method authenticates the user's email and password.
+     *
      * @return the PasswordAuthentication with the email and password
      */
     protected PasswordAuthentication getPasswordAuthentication() {

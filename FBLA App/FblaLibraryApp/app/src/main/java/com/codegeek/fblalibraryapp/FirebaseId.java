@@ -17,7 +17,7 @@ import com.google.firebase.messaging.FirebaseMessaging;
  */
 public class FirebaseId extends FirebaseInstanceIdService {
     private static final String TAG = "FirebaseIDService";
-    public static final String myPrefs = "myPrefs" ;
+    public static final String myPrefs = "myPrefs";
     public static final String tokenKey = "tokenKey";
     public static final String registrationKey = "registrationKey";
 
@@ -25,7 +25,7 @@ public class FirebaseId extends FirebaseInstanceIdService {
 
     /**
      * Persist token to third-party servers.
-     *
+     * <p>
      * Modify this method to associate the user's FCM InstanceID token with any server-side account
      * maintained by your application.
      */
@@ -41,15 +41,13 @@ public class FirebaseId extends FirebaseInstanceIdService {
         editor.apply();
 
         FirebaseMessaging.getInstance().subscribeToTopic("booksOverdue");
-//        Toast.makeText(getApplicationContext(), refreshedToken, Toast.LENGTH_SHORT).show();
 
-        // TODO: Implement this method to send any registration to your app's servers.
         sendRegistrationToServer(refreshedToken);
     }
 
     /**
      * Persist token to third-party servers.
-     *
+     * <p>
      * Modify this method to associate the user's FCM InstanceID token with any server-side account
      * maintained by your application.
      *
@@ -66,6 +64,5 @@ public class FirebaseId extends FirebaseInstanceIdService {
         editor.apply();
 
         Log.v("FirebaseID--SharedPrefs", "Done saving to shared prefs!!");
-//        Toast.makeText(getApplicationContext(),"Done saving to shared prefs!!",Toast.LENGTH_LONG).show();
     }
 }

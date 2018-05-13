@@ -8,12 +8,12 @@ import android.support.v4.app.FragmentPagerAdapter;
  * This class controls the three main fragments in the app and
  * returns the appropriate fragment when the user switches between
  * fragments in the app.
- *
+ * <p>
  * Bugs:
  *
  * @Shreshth Kharbanda
  */
-public class TabsPagerAdapter extends FragmentPagerAdapter{
+public class TabsPagerAdapter extends FragmentPagerAdapter {
     TabsPagerAdapter(FragmentManager fm) {
         super(fm);
     }
