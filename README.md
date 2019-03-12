@@ -67,20 +67,20 @@ Author: Shreshth Kharbanda, North Creek High School, Bothell WA
    - sendfirebasenotification.php
    
    ## Screenshots
- ![Book Catalog](https://ibb.co/LrQ4jPX)
- ![Log In Screen](https://ibb.co/FWGR0Nx)
- ![Log In Screen Filled Out](https://ibb.co/MSqDV1B)
- ![Log In Screen Filled Out With Password Visible](https://ibb.co/fny3mB2)
- ![Reset Password Dialog Box](https://ibb.co/9pg32vY)
- ![Sign Up Screen](https://ibb.co/6XT88JL)
- ![Sign Up Screen Continued](https://ibb.co/VtGd08S)
- ![My Account Screen](https://ibb.co/ydxJT0b)
- ![Checkout Book Dialog Box](https://ibb.co/XLLwSQz)
- ![Checkout Book Manually](https://ibb.co/WKqcV0G)
- ![Scan to Checkout Book](https://ibb.co/0B4661H)
- ![Report Bug Dialog Box](https://ibb.co/RjPcdF1)
- ![Library Map in App](https://ibb.co/QrWJRXW)
- ![Change Password Dialog Box](https://ibb.co/JxZN4Q5)
+ ![Book Catalog](https://i.ibb.co/FXsGZWL/mybrary-Screenshots-p001.png)
+ ![Log In Screen](https://i.ibb.co/cvz4CMg/mybrary-Screenshots-p002.png)
+ ![Log In Screen Filled Out](https://i.ibb.co/kBYg8Dm/mybrary-Screenshots-p003.png)
+ ![Log In Screen Filled Out With Password Visible](https://i.ibb.co/NmJ0wQs/mybrary-Screenshots-p004.png)
+ ![Reset Password Dialog Box](https://i.ibb.co/Tw2qRTh/mybrary-Screenshots-p005.png)
+ ![Sign Up Screen](https://i.ibb.co/g4fddFh/mybrary-Screenshots-p006.png)
+ ![Sign Up Screen Continued](https://i.ibb.co/XbP9fTs/mybrary-Screenshots-p007.png)
+ ![My Account Screen](https://i.ibb.co/JmSPLnM/mybrary-Screenshots-p008.png)
+ ![Checkout Book Dialog Box](https://i.ibb.co/C88rhcn/mybrary-Screenshots-p009.png)
+ ![Checkout Book Manually](https://i.ibb.co/ysG84pd/mybrary-Screenshots-p010.png)
+ ![Scan to Checkout Book](https://i.ibb.co/DGcvvm0/mybrary-Screenshots-p011.png)
+ ![Report Bug Dialog Box](https://i.ibb.co/DrkQTJN/mybrary-Screenshots-p012.png)
+ ![Library Map in App](https://i.ibb.co/jgC82HC/mybrary-Screenshots-p013.png)
+ ![Change Password Dialog Box](https://i.ibb.co/dbZSqgG/mybrary-Screenshots-p014.png)
  
  
  Sources:
