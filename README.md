@@ -67,8 +67,20 @@ Author: Shreshth Kharbanda, North Creek High School, Bothell WA
    - sendfirebasenotification.php
    
    ## Screenshots
- ![Book Catalog](https://ibb.co/LrQ4jPX)           ![picture alt](https://ibb.co/FWGR0Nx "Log In Screen")              ![picture alt](https://ibb.co/MSqDV1B "Log In Screen Filled Out")          ![picture alt](https://ibb.co/fny3mB2 "Log In Screen Filled Out With Password Visible")            ![picture alt](https://ibb.co/9pg32vY "Reset Password Dialog Box")         ![picture alt](https://scontent-sea1-1.xx.fbcdn.net/v/t1.0-9/29570824_1817692558325633_4983673639460771397_n.jpg?_nc_cat=0&oh=f823441909f7b45b6c8947e50fc82d57&oe=5B4172B1 "Log In Screen Filled Out")          ![picture alt](https://scontent-sea1-1.xx.fbcdn.net/v/t1.0-9/29570824_1817692558325633_4983673639460771397_n.jpg?_nc_cat=0&oh=f823441909f7b45b6c8947e50fc82d57&oe=5B4172B1 "Log In Screen Filled Out")          ![picture alt](https://ibb.co/fny3mB2 "Log In Screen Filled Out With Visible Password")            ![picture alt](https://scontent-sea1-1.xx.fbcdn.net/v/t1.0-9/29542649_1817692618325627_6173399451050820616_n.jpg?_nc_cat=0&oh=cdc9858eae7473e54b2931ea5fdf5b11&oe=5B37EC44 "Reset Password Dialog Box")         ![picture alt](https://ibb.co/6XT88JL "Sign Up Screen")          ![picture alt](https://ibb.co/VtGd08S "Sign Up Screen Continued")          ![picture alt](https://ibb.co/ydxJT0b "My Account Screen")         ![picture alt](https://ibb.co/XLLwSQz "Checkout Book Dialog Box")                ![picture alt](https://ibb.co/WKqcV0G "Checkout Book Manually")            ![picture alt](https://ibb.co/0B4661H "Scan to Checkout Book")         ![picture alt](https://ibb.co/RjPcdF1 "Report Bug Dialog Box")          ![picture alt](https://ibb.co/QrWJRXW "Library Map in App")         ![picture alt](https://ibb.co/JxZN4Q5
- "Change Password DIalog Box")
+ ![Book Catalog](https://ibb.co/LrQ4jPX)
+ ![Log In Screen](https://ibb.co/FWGR0Nx)
+ ![Log In Screen Filled Out](https://ibb.co/MSqDV1B)
+ ![Log In Screen Filled Out With Password Visible](https://ibb.co/fny3mB2)
+ ![Reset Password Dialog Box](https://ibb.co/9pg32vY)
+ ![Sign Up Screen](https://ibb.co/6XT88JL)
+ ![Sign Up Screen Continued](https://ibb.co/VtGd08S)
+ ![My Account Screen](https://ibb.co/ydxJT0b)
+ ![Checkout Book Dialog Box](https://ibb.co/XLLwSQz)
+ ![Checkout Book Manually](https://ibb.co/WKqcV0G)
+ ![Scan to Checkout Book](https://ibb.co/0B4661H)
+ ![Report Bug Dialog Box](https://ibb.co/RjPcdF1)
+ ![Library Map in App](https://ibb.co/QrWJRXW)
+ ![Change Password Dialog Box](https://ibb.co/JxZN4Q5)
  
  
  Sources:
