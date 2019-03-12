@@ -67,20 +67,20 @@ Author: Shreshth Kharbanda, North Creek High School, Bothell WA
    - sendfirebasenotification.php
    
    ## Screenshots
- ![Book Catalog] (https://ibb.co/LrQ4jPX)
- ![Log In Screen] (https://ibb.co/FWGR0Nx)
- ![Log In Screen Filled Out] (https://ibb.co/MSqDV1B)
- ![Log In Screen Filled Out With Password Visible] (https://ibb.co/fny3mB2)
- ![Reset Password Dialog Box] (https://ibb.co/9pg32vY)
- ![Sign Up Screen] (https://ibb.co/6XT88JL)
- ![Sign Up Screen Continued] (https://ibb.co/VtGd08S)
- ![My Account Screen] (https://ibb.co/ydxJT0b)
- ![Checkout Book Dialog Box] (https://ibb.co/XLLwSQz)
- ![Checkout Book Manually] (https://ibb.co/WKqcV0G)
- ![Scan to Checkout Book] (https://ibb.co/0B4661H)
- ![Report Bug Dialog Box] (https://ibb.co/RjPcdF1)
- ![Library Map in App] (https://ibb.co/QrWJRXW)
- ![Change Password Dialog Box] (https://ibb.co/JxZN4Q5)
+ ![Book Catalog](https://ibb.co/LrQ4jPX)
+ ![Log In Screen](https://ibb.co/FWGR0Nx)
+ ![Log In Screen Filled Out](https://ibb.co/MSqDV1B)
+ ![Log In Screen Filled Out With Password Visible](https://ibb.co/fny3mB2)
+ ![Reset Password Dialog Box](https://ibb.co/9pg32vY)
+ ![Sign Up Screen](https://ibb.co/6XT88JL)
+ ![Sign Up Screen Continued](https://ibb.co/VtGd08S)
+ ![My Account Screen](https://ibb.co/ydxJT0b)
+ ![Checkout Book Dialog Box](https://ibb.co/XLLwSQz)
+ ![Checkout Book Manually](https://ibb.co/WKqcV0G)
+ ![Scan to Checkout Book](https://ibb.co/0B4661H)
+ ![Report Bug Dialog Box](https://ibb.co/RjPcdF1)
+ ![Library Map in App](https://ibb.co/QrWJRXW)
+ ![Change Password Dialog Box](https://ibb.co/JxZN4Q5)
  
  
  Sources:
